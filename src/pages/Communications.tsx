@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Send, Search, Phone, Video, MoreHorizontal, Paperclip, Smile } from "lucide-react";
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ChatContact {
   id: number;
