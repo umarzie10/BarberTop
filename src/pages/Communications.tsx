@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Send, Search, Phone, Video, MoreHorizontal, Paperclip, Smile } from "lucide-react";
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ChatContact {
   id: number;
@@ -44,13 +45,14 @@ const channelBadge = {
 };
 
 const Communications = () => {
+  const { t } = useLanguage();
   const [selectedContact, setSelectedContact] = useState(chatContacts[0]);
 
   return (
     <div className="h-screen flex flex-col">
       <div className="px-6 py-4 border-b border-border shrink-0">
-        <h1 className="text-xl font-semibold text-foreground tracking-tight">Xabarlar</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">Chat, Telegram va Email — bir joyda</p>
+        <h1 className="text-xl font-semibold text-foreground tracking-tight">{t("comm.title")}</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">{t("comm.subtitle")}</p>
       </div>
 
       <div className="flex-1 flex overflow-hidden">

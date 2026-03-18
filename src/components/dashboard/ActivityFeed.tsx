@@ -1,15 +1,9 @@
 import { motion } from "framer-motion";
-import { Phone, Mail, FileText, CheckCircle } from "lucide-react";
-
-const activities = [
-  { icon: CheckCircle, text: "TechVision bitimi shartnoma bosqichiga o'tdi", time: "5 daqiqa oldin", color: "text-success" },
-  { icon: Phone, text: "Sardor Raximov bilan qo'ng'iroq — 12 daqiqa", time: "1 soat oldin", color: "text-primary" },
-  { icon: Mail, text: "GlobalTrade Co'ga taklif yuborildi", time: "2 soat oldin", color: "text-primary" },
-  { icon: FileText, text: "SmartLogistics shartnomasi tayyorlandi", time: "3 soat oldin", color: "text-accent" },
-  { icon: Phone, text: "Madina Xolmatova bilan uchrashish rejalashtirildi", time: "5 soat oldin", color: "text-warning" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const ActivityFeed = () => {
+  const { t } = useLanguage();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -18,18 +12,10 @@ export const ActivityFeed = () => {
       className="bg-card border border-border rounded-lg forge-shadow-sm"
     >
       <div className="px-5 py-4 border-b border-border">
-        <h3 className="font-semibold text-foreground text-sm">Faoliyat</h3>
+        <h3 className="font-semibold text-foreground text-sm">{t("dash.activity")}</h3>
       </div>
-      <div className="divide-y divide-border">
-        {activities.map((activity, i) => (
-          <div key={i} className="px-5 py-3.5 flex items-start gap-3">
-            <activity.icon className={`w-4 h-4 mt-0.5 shrink-0 ${activity.color}`} />
-            <div className="min-w-0">
-              <p className="text-sm text-foreground">{activity.text}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{activity.time}</p>
-            </div>
-          </div>
-        ))}
+      <div className="px-5 py-8 text-center text-sm text-muted-foreground">
+        {t("dash.noActivity")}
       </div>
     </motion.div>
   );

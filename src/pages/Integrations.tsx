@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Zap, Check, ExternalLink, Plus } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Integration {
   id: string;
@@ -26,6 +27,7 @@ const integrations: Integration[] = [
 ];
 
 const Integrations = () => {
+  const { t } = useLanguage();
   const connected = integrations.filter(i => i.connected);
   const available = integrations.filter(i => !i.connected);
 
@@ -33,8 +35,8 @@ const Integrations = () => {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-foreground tracking-tight">Integratsiyalar</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Tashqi xizmatlarni bir marta ulang, doimo foydalaning</p>
+          <h1 className="text-xl font-semibold text-foreground tracking-tight">{t("int.title")}</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">{t("int.subtitle")}</p>
         </div>
       </div>
 
