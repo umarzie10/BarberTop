@@ -1,5 +1,4 @@
 import { useState, useCallback } from "react";
-import { motion } from "framer-motion";
 import { Plus, MoreHorizontal } from "lucide-react";
 import {
   DndContext,
@@ -28,72 +27,96 @@ export interface Deal {
 export interface PipelineColumn {
   id: string;
   title: string;
+  emoji: string;
   deals: Deal[];
 }
 
 const initialColumns: PipelineColumn[] = [
   {
-    id: "new",
-    title: "Yangi",
+    id: "lead",
+    title: "Lead",
+    emoji: "📍",
     deals: [
       { id: "d1", name: "CloudBase Systems", company: "Madina X.", amount: 15800, daysInStage: 2 },
       { id: "d2", name: "InnoTech Solutions", company: "Kamol T.", amount: 34200, daysInStage: 1 },
       { id: "d3", name: "AgriSmart", company: "Rustam N.", amount: 42000, daysInStage: 5 },
-      { id: "d4", name: "EduPlatform", company: "Lola S.", amount: 32500, daysInStage: 3 },
     ],
   },
   {
     id: "qualified",
-    title: "Kvalifikatsiya",
+    title: "Qualified Lead",
+    emoji: "✅",
     deals: [
       { id: "d5", name: "FinanceHub", company: "Alisher M.", amount: 78000, daysInStage: 7 },
       { id: "d6", name: "LogiTrack", company: "Sherzod K.", amount: 56000, daysInStage: 4 },
-      { id: "d7", name: "MediaGroup", company: "Diyor R.", amount: 53000, daysInStage: 12 },
     ],
   },
   {
-    id: "proposal",
-    title: "Taklif",
+    id: "negotiation",
+    title: "Muzokara",
+    emoji: "🤝",
     deals: [
       { id: "d8", name: "GlobalTrade Co", company: "Nilufar K.", amount: 28500, daysInStage: 3 },
       { id: "d9", name: "BuildCorp", company: "Otabek J.", amount: 67200, daysInStage: 6 },
     ],
   },
   {
-    id: "negotiation",
-    title: "Muzokara",
+    id: "proposal",
+    title: "Taklif / Shartnoma",
+    emoji: "📋",
     deals: [
       { id: "d10", name: "DataStream Inc", company: "Bobur A.", amount: 67200, daysInStage: 8 },
-      { id: "d11", name: "SmartLogistics", company: "Jasur T.", amount: 92000, daysInStage: 15 },
     ],
   },
   {
-    id: "closed",
-    title: "Yopilgan",
+    id: "won",
+    title: "Yutildi ✅",
+    emoji: "🏆",
     deals: [
       { id: "d12", name: "TechVision LLC", company: "Sardor R.", amount: 45000, daysInStage: 0 },
+      { id: "d13", name: "SmartLogistics", company: "Jasur T.", amount: 92000, daysInStage: 2 },
+    ],
+  },
+  {
+    id: "lost",
+    title: "Yo'qotildi",
+    emoji: "❌",
+    deals: [
+      { id: "d14", name: "OldTech Corp", company: "Nodir S.", amount: 23000, daysInStage: 30 },
     ],
   },
 ];
+
+const stageColors: Record<string, string> = {
+  lead: "border-t-muted-foreground",
+  qualified: "border-t-primary",
+  negotiation: "border-t-warning",
+  proposal: "border-t-accent",
+  won: "border-t-success",
+  lost: "border-t-destructive",
+};
 
 function DroppableColumn({ column, children }: { column: PipelineColumn; children: React.ReactNode }) {
   const { setNodeRef, isOver } = useDroppable({ id: column.id });
   const total = column.deals.reduce((s, d) => s + d.amount, 0);
 
   return (
-    <div className="w-[280px] shrink-0 flex flex-col">
-      <div className="flex items-center justify-between mb-3 px-1">
-        <div className="flex items-center gap-2">
-          <h3 className="text-sm font-semibold text-foreground">{column.title}</h3>
-          <span className="text-[10px] font-mono bg-muted text-muted-foreground px-1.5 py-0.5 rounded">
-            {column.deals.length}
-          </span>
+    <div className="w-[260px] shrink-0 flex flex-col">
+      <div className={`border-t-2 ${stageColors[column.id] || "border-t-border"} rounded-t-lg`}>
+        <div className="flex items-center justify-between mb-2 px-2 pt-3">
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs">{column.emoji}</span>
+            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider">{column.title}</h3>
+            <span className="text-[10px] font-mono bg-muted text-muted-foreground px-1.5 py-0.5 rounded">
+              {column.deals.length}
+            </span>
+          </div>
         </div>
-        <span className="text-xs font-mono text-muted-foreground">${total.toLocaleString()}</span>
+        <p className="text-[11px] font-mono text-muted-foreground px-2 mb-3">${total.toLocaleString()}</p>
       </div>
       <div
         ref={setNodeRef}
-        className={`flex-1 space-y-2 overflow-y-auto max-h-[calc(100vh-220px)] p-1 rounded-lg transition-colors ${
+        className={`flex-1 space-y-2 overflow-y-auto max-h-[calc(100vh-240px)] p-1 rounded-lg transition-colors ${
           isOver ? "bg-primary/5 ring-2 ring-primary/20" : ""
         }`}
       >
@@ -121,12 +144,12 @@ function SortableDealCard({ deal }: { deal: Deal }) {
 
 function DealCard({ deal }: { deal: Deal }) {
   return (
-    <div className="bg-card border border-border rounded-lg p-4 forge-shadow-sm cursor-grab active:cursor-grabbing group">
-      <div className="flex items-start justify-between mb-2">
-        <p className="text-sm font-medium text-foreground">{deal.name}</p>
+    <div className="bg-card border border-border rounded-lg p-3.5 forge-shadow-sm cursor-grab active:cursor-grabbing group">
+      <div className="flex items-start justify-between mb-1.5">
+        <p className="text-sm font-medium text-foreground leading-tight">{deal.name}</p>
         <MoreHorizontal className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 forge-transition" />
       </div>
-      <p className="text-xs text-muted-foreground mb-3">{deal.company}</p>
+      <p className="text-xs text-muted-foreground mb-2.5">{deal.company}</p>
       <div className="flex items-center justify-between">
         <span className="text-sm font-mono font-semibold text-foreground">${deal.amount.toLocaleString()}</span>
         <span className="text-[10px] text-muted-foreground">
@@ -163,7 +186,6 @@ export const PipelineBoard = () => {
     if (!over) return;
 
     const activeCol = findColumnByDealId(active.id as string);
-    // over could be a column id or a deal id
     let overColId = over.id as string;
     const overCol = columns.find((c) => c.id === overColId) || findColumnByDealId(overColId);
     if (!overCol) return;
@@ -181,16 +203,14 @@ export const PipelineBoard = () => {
     });
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    setActiveId(null);
-  };
+  const handleDragEnd = () => setActiveId(null);
 
   const activeDeal = activeId ? findDeal(activeId)?.deal : null;
 
   const handleAddDeal = (deal: { name: string; company: string; amount: number }) => {
     setColumns((prev) =>
       prev.map((col) =>
-        col.id === "new"
+        col.id === "lead"
           ? { ...col, deals: [...col.deals, { id: `d${Date.now()}`, ...deal, daysInStage: 0 }] }
           : col
       )
@@ -202,7 +222,7 @@ export const PipelineBoard = () => {
 
   return (
     <>
-      <div className="flex gap-4 overflow-x-auto pb-4 px-6">
+      <div className="flex gap-3 overflow-x-auto pb-4 px-6">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}
@@ -217,13 +237,15 @@ export const PipelineBoard = () => {
                   <SortableDealCard key={deal.id} deal={deal} />
                 ))}
               </SortableContext>
-              <button
-                onClick={() => setShowNewDeal(true)}
-                className="w-full flex items-center justify-center gap-1.5 py-2.5 text-sm text-muted-foreground border border-dashed border-border rounded-lg hover:bg-muted forge-transition"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                Qo'shish
-              </button>
+              {col.id !== "lost" && (
+                <button
+                  onClick={() => setShowNewDeal(true)}
+                  className="w-full flex items-center justify-center gap-1.5 py-2 text-xs text-muted-foreground border border-dashed border-border rounded-lg hover:bg-muted forge-transition"
+                >
+                  <Plus className="w-3 h-3" />
+                  Qo'shish
+                </button>
+              )}
             </DroppableColumn>
           ))}
           <DragOverlay>
