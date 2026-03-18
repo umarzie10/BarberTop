@@ -117,7 +117,7 @@ export const AppSidebar = () => {
             <p className="text-sm font-medium text-foreground truncate">
               {user?.user_metadata?.full_name || user?.email || "Foydalanuvchi"}
             </p>
-            <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+            <p className="text-xs text-muted-foreground truncate">{role ? roleLabels[role] : user?.email}</p>
           </div>
           <button onClick={signOut} className="p-1 hover:bg-muted rounded forge-transition" title="Chiqish">
             <LogOut className="w-3.5 h-3.5 text-muted-foreground" />
