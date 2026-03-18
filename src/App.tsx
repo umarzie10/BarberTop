@@ -14,6 +14,7 @@ import Activities from "./pages/Activities";
 import Communications from "./pages/Communications";
 import Integrations from "./pages/Integrations";
 import Auth from "./pages/Auth";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -61,6 +62,7 @@ const App = () => (
                       <Route path="/activities" element={<Activities />} />
                       <Route path="/communications" element={<Communications />} />
                       <Route path="/integrations" element={<Integrations />} />
+                      <Route path="/settings" element={<Settings />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </AppLayout>
