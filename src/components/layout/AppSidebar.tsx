@@ -46,6 +46,7 @@ const navSections = [
 export const AppSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { role } = useUserRole();
   const { user, signOut } = useAuth();
 
   const initials = user?.user_metadata?.full_name
