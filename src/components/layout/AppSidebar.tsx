@@ -7,20 +7,39 @@ import {
   BarChart3,
   Settings,
   Zap,
-  Mail,
+  MessageSquare,
   Search,
-  ChevronDown,
   LogOut,
+  UserPlus,
+  ClipboardList,
+  Building2,
 } from "lucide-react";
 
-const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-  { icon: Kanban, label: "Pipeline", path: "/pipeline" },
-  { icon: Users, label: "Kontaktlar", path: "/contacts" },
-  { icon: Mail, label: "Xabarlar", path: "/messages" },
-  { icon: BarChart3, label: "Analitika", path: "/analytics" },
-  { icon: Zap, label: "Integratsiya", path: "/integrations" },
-  { icon: Settings, label: "Sozlamalar", path: "/settings" },
+const navSections = [
+  {
+    label: "Asosiy",
+    items: [
+      { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+      { icon: Kanban, label: "Pipeline", path: "/pipeline" },
+      { icon: ClipboardList, label: "Faoliyatlar", path: "/activities" },
+    ],
+  },
+  {
+    label: "CRM",
+    items: [
+      { icon: UserPlus, label: "Leadlar", path: "/leads" },
+      { icon: Users, label: "Kontaktlar", path: "/contacts" },
+      { icon: MessageSquare, label: "Xabarlar", path: "/communications" },
+    ],
+  },
+  {
+    label: "Tizim",
+    items: [
+      { icon: BarChart3, label: "Analitika", path: "/analytics" },
+      { icon: Zap, label: "Integratsiya", path: "/integrations" },
+      { icon: Settings, label: "Sozlamalar", path: "/settings" },
+    ],
+  },
 ];
 
 export const AppSidebar = () => {
@@ -57,24 +76,33 @@ export const AppSidebar = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-1 space-y-0.5 overflow-y-auto">
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <button
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm rounded-md forge-transition ${
-                isActive
-                  ? "bg-primary text-primary-foreground"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent"
-              }`}
-            >
-              <item.icon className="w-4 h-4" />
-              <span>{item.label}</span>
-            </button>
-          );
-        })}
+      <nav className="flex-1 px-3 py-1 overflow-y-auto space-y-4">
+        {navSections.map((section) => (
+          <div key={section.label}>
+            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest px-3 mb-1.5">
+              {section.label}
+            </p>
+            <div className="space-y-0.5">
+              {section.items.map((item) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <button
+                    key={item.path}
+                    onClick={() => navigate(item.path)}
+                    className={`w-full flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md forge-transition ${
+                      isActive
+                        ? "bg-primary text-primary-foreground"
+                        : "text-sidebar-foreground hover:bg-sidebar-accent"
+                    }`}
+                  >
+                    <item.icon className="w-4 h-4" />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
 
       {/* Bottom */}

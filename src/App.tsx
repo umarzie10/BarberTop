@@ -9,6 +9,10 @@ import Index from "./pages/Index";
 import Pipeline from "./pages/Pipeline";
 import Contacts from "./pages/Contacts";
 import Analytics from "./pages/Analytics";
+import Leads from "./pages/Leads";
+import Activities from "./pages/Activities";
+import Communications from "./pages/Communications";
+import Integrations from "./pages/Integrations";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -53,6 +57,10 @@ const App = () => (
                       <Route path="/pipeline" element={<Pipeline />} />
                       <Route path="/contacts" element={<Contacts />} />
                       <Route path="/analytics" element={<Analytics />} />
+                      <Route path="/leads" element={<Leads />} />
+                      <Route path="/activities" element={<Activities />} />
+                      <Route path="/communications" element={<Communications />} />
+                      <Route path="/integrations" element={<Integrations />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </AppLayout>
