@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   LayoutDashboard,
   Users,
@@ -10,7 +10,7 @@ import {
   Mail,
   Search,
   ChevronDown,
-  Plus,
+  LogOut,
 } from "lucide-react";
 
 const navItems = [
