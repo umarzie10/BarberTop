@@ -2,6 +2,8 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useLanguage, langLabels, type Language } from "@/contexts/LanguageContext";
+import { Globe } from "lucide-react";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -11,6 +13,7 @@ const Auth = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { t, lang, setLang } = useLanguage();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +35,7 @@ const Auth = () => {
           },
         });
         if (error) throw error;
-        setError("Ro'yxatdan o'tdingiz! Email'ingizni tekshiring.");
+        navigate("/");
       }
     } catch (err: any) {
       setError(err.message);
@@ -40,6 +43,8 @@ const Auth = () => {
       setLoading(false);
     }
   };
+
+  const langs: Language[] = ["uz", "ru", "en"];
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
@@ -49,6 +54,22 @@ const Auth = () => {
         transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as const }}
         className="w-full max-w-[380px] mx-4"
       >
+        {/* Language switcher */}
+        <div className="flex items-center justify-center gap-1 mb-6">
+          <Globe className="w-3.5 h-3.5 text-muted-foreground mr-1" />
+          {langs.map((l) => (
+            <button
+              key={l}
+              onClick={() => setLang(l)}
+              className={`px-2.5 py-1 text-xs rounded-md forge-transition ${
+                lang === l ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
+              }`}
+            >
+              {langLabels[l]}
+            </button>
+          ))}
+        </div>
+
         <div className="flex items-center gap-2 mb-8 justify-center">
           <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
             <span className="text-primary-foreground font-semibold text-sm">F</span>
@@ -58,27 +79,27 @@ const Auth = () => {
 
         <div className="bg-card border border-border rounded-lg forge-shadow-md p-6">
           <h2 className="text-lg font-semibold text-foreground mb-1 tracking-tight">
-            {isLogin ? "Kirish" : "Ro'yxatdan o'tish"}
+            {isLogin ? t("auth.login") : t("auth.register")}
           </h2>
           <p className="text-sm text-muted-foreground mb-5">
-            {isLogin ? "Hisobingizga kiring" : "Yangi hisob yarating"}
+            {isLogin ? t("auth.loginDesc") : t("auth.registerDesc")}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-3">
             {!isLogin && (
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Ism</label>
+                <label className="text-xs font-medium text-muted-foreground mb-1.5 block">{t("auth.name")}</label>
                 <input
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="To'liq ismingiz"
+                  placeholder={t("auth.namePlaceholder")}
                   className="w-full px-3 py-2 text-sm border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/20"
                   required
                 />
               </div>
             )}
             <div>
-              <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Email</label>
+              <label className="text-xs font-medium text-muted-foreground mb-1.5 block">{t("auth.email")}</label>
               <input
                 type="email"
                 value={email}
@@ -89,7 +110,7 @@ const Auth = () => {
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Parol</label>
+              <label className="text-xs font-medium text-muted-foreground mb-1.5 block">{t("auth.password")}</label>
               <input
                 type="password"
                 value={password}
@@ -101,26 +122,24 @@ const Auth = () => {
               />
             </div>
 
-            {error && (
-              <p className="text-xs text-destructive">{error}</p>
-            )}
+            {error && <p className="text-xs text-destructive">{error}</p>}
 
             <button
               type="submit"
               disabled={loading}
               className="w-full py-2 text-sm font-medium bg-primary text-primary-foreground rounded-md forge-transition hover:opacity-90 disabled:opacity-50"
             >
-              {loading ? "..." : isLogin ? "Kirish" : "Ro'yxatdan o'tish"}
+              {loading ? "..." : isLogin ? t("auth.login") : t("auth.register")}
             </button>
           </form>
 
           <p className="text-xs text-muted-foreground text-center mt-4">
-            {isLogin ? "Hisobingiz yo'qmi?" : "Hisobingiz bormi?"}{" "}
+            {isLogin ? t("auth.noAccount") : t("auth.hasAccount")}{" "}
             <button
               onClick={() => { setIsLogin(!isLogin); setError(""); }}
               className="text-primary font-medium hover:underline"
             >
-              {isLogin ? "Ro'yxatdan o'ting" : "Kirish"}
+              {isLogin ? t("auth.register") : t("auth.login")}
             </button>
           </p>
         </div>

@@ -4,6 +4,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AppLayout } from "@/components/layout/AppLayout";
 import Index from "./pages/Index";
 import Pipeline from "./pages/Pipeline";
@@ -13,6 +15,7 @@ import Leads from "./pages/Leads";
 import Activities from "./pages/Activities";
 import Communications from "./pages/Communications";
 import Integrations from "./pages/Integrations";
+import Automation from "./pages/Automation";
 import Auth from "./pages/Auth";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
@@ -41,38 +44,43 @@ function AuthRoute({ children }: { children: React.ReactNode }) {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            <Route path="/auth" element={<AuthRoute><Auth /></AuthRoute>} />
-            <Route
-              path="/*"
-              element={
-                <ProtectedRoute>
-                  <AppLayout>
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/pipeline" element={<Pipeline />} />
-                      <Route path="/contacts" element={<Contacts />} />
-                      <Route path="/analytics" element={<Analytics />} />
-                      <Route path="/leads" element={<Leads />} />
-                      <Route path="/activities" element={<Activities />} />
-                      <Route path="/communications" element={<Communications />} />
-                      <Route path="/integrations" element={<Integrations />} />
-                      <Route path="/settings" element={<Settings />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </AppLayout>
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AuthProvider>
+              <Routes>
+                <Route path="/auth" element={<AuthRoute><Auth /></AuthRoute>} />
+                <Route
+                  path="/*"
+                  element={
+                    <ProtectedRoute>
+                      <AppLayout>
+                        <Routes>
+                          <Route path="/" element={<Index />} />
+                          <Route path="/pipeline" element={<Pipeline />} />
+                          <Route path="/contacts" element={<Contacts />} />
+                          <Route path="/analytics" element={<Analytics />} />
+                          <Route path="/leads" element={<Leads />} />
+                          <Route path="/activities" element={<Activities />} />
+                          <Route path="/communications" element={<Communications />} />
+                          <Route path="/integrations" element={<Integrations />} />
+                          <Route path="/automation" element={<Automation />} />
+                          <Route path="/settings" element={<Settings />} />
+                          <Route path="*" element={<NotFound />} />
+                        </Routes>
+                      </AppLayout>
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </AuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 
