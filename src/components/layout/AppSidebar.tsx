@@ -81,13 +81,17 @@ export const AppSidebar = () => {
       <div className="px-3 py-3 border-t border-sidebar-border">
         <div className="flex items-center gap-2.5 px-3 py-2">
           <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center">
-            <span className="text-primary text-xs font-semibold">AK</span>
+            <span className="text-primary text-xs font-semibold">{initials}</span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground truncate">Aziz Karimov</p>
-            <p className="text-xs text-muted-foreground truncate">Sotuv menejeri</p>
+            <p className="text-sm font-medium text-foreground truncate">
+              {user?.user_metadata?.full_name || user?.email || "Foydalanuvchi"}
+            </p>
+            <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
           </div>
-          <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+          <button onClick={signOut} className="p-1 hover:bg-muted rounded forge-transition" title="Chiqish">
+            <LogOut className="w-3.5 h-3.5 text-muted-foreground" />
+          </button>
         </div>
       </div>
     </aside>
