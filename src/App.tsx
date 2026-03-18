@@ -62,6 +62,7 @@ const App = () => (
                       <Route path="/activities" element={<Activities />} />
                       <Route path="/communications" element={<Communications />} />
                       <Route path="/integrations" element={<Integrations />} />
+                      <Route path="/settings" element={<Settings />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </AppLayout>
