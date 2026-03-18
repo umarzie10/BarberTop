@@ -14,7 +14,10 @@ import {
   Kanban,
   BarChart3,
   Plus,
-  Search,
+  UserPlus,
+  ClipboardList,
+  MessageSquare,
+  Zap,
 } from "lucide-react";
 
 export const CommandMenu = () => {
@@ -47,6 +50,10 @@ export const CommandMenu = () => {
             <Plus className="mr-2 h-4 w-4" />
             Yangi bitim qo'shish
           </CommandItem>
+          <CommandItem onSelect={() => runAction("/leads")}>
+            <Plus className="mr-2 h-4 w-4" />
+            Yangi lead qo'shish
+          </CommandItem>
           <CommandItem onSelect={() => runAction("/contacts")}>
             <Plus className="mr-2 h-4 w-4" />
             Yangi kontakt qo'shish
@@ -61,13 +68,29 @@ export const CommandMenu = () => {
             <Kanban className="mr-2 h-4 w-4" />
             Pipeline
           </CommandItem>
+          <CommandItem onSelect={() => runAction("/leads")}>
+            <UserPlus className="mr-2 h-4 w-4" />
+            Leadlar
+          </CommandItem>
           <CommandItem onSelect={() => runAction("/contacts")}>
             <Users className="mr-2 h-4 w-4" />
             Kontaktlar
           </CommandItem>
+          <CommandItem onSelect={() => runAction("/activities")}>
+            <ClipboardList className="mr-2 h-4 w-4" />
+            Faoliyatlar
+          </CommandItem>
+          <CommandItem onSelect={() => runAction("/communications")}>
+            <MessageSquare className="mr-2 h-4 w-4" />
+            Xabarlar
+          </CommandItem>
           <CommandItem onSelect={() => runAction("/analytics")}>
             <BarChart3 className="mr-2 h-4 w-4" />
             Analitika
+          </CommandItem>
+          <CommandItem onSelect={() => runAction("/integrations")}>
+            <Zap className="mr-2 h-4 w-4" />
+            Integratsiya
           </CommandItem>
         </CommandGroup>
       </CommandList>
