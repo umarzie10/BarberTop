@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Zap, Check, ExternalLink, Plus } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Integration {
   id: string;
