@@ -45,6 +45,7 @@ const channelBadge = {
 };
 
 const Communications = () => {
+  const { t } = useLanguage();
   const [selectedContact, setSelectedContact] = useState(chatContacts[0]);
 
   return (
