@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserRole, roleLabels } from "@/hooks/useUserRole";
 import {
   LayoutDashboard,
   Users,
