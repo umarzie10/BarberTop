@@ -14,6 +14,7 @@ import Activities from "./pages/Activities";
 import Communications from "./pages/Communications";
 import Integrations from "./pages/Integrations";
 import Auth from "./pages/Auth";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
