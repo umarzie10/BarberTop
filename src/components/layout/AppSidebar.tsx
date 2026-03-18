@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   LayoutDashboard,
   Users,
@@ -10,7 +10,7 @@ import {
   Mail,
   Search,
   ChevronDown,
-  Plus,
+  LogOut,
 } from "lucide-react";
 
 const navItems = [
@@ -26,6 +26,11 @@ const navItems = [
 export const AppSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, signOut } = useAuth();
+
+  const initials = user?.user_metadata?.full_name
+    ? user.user_metadata.full_name.split(" ").map((n: string) => n[0]).join("").toUpperCase()
+    : user?.email?.substring(0, 2).toUpperCase() || "??";
 
   return (
     <aside className="w-[240px] h-screen bg-sidebar border-r border-sidebar-border flex flex-col fixed left-0 top-0 z-30">
@@ -76,13 +81,17 @@ export const AppSidebar = () => {
       <div className="px-3 py-3 border-t border-sidebar-border">
         <div className="flex items-center gap-2.5 px-3 py-2">
           <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center">
-            <span className="text-primary text-xs font-semibold">AK</span>
+            <span className="text-primary text-xs font-semibold">{initials}</span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground truncate">Aziz Karimov</p>
-            <p className="text-xs text-muted-foreground truncate">Sotuv menejeri</p>
+            <p className="text-sm font-medium text-foreground truncate">
+              {user?.user_metadata?.full_name || user?.email || "Foydalanuvchi"}
+            </p>
+            <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
           </div>
-          <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+          <button onClick={signOut} className="p-1 hover:bg-muted rounded forge-transition" title="Chiqish">
+            <LogOut className="w-3.5 h-3.5 text-muted-foreground" />
+          </button>
         </div>
       </div>
     </aside>
