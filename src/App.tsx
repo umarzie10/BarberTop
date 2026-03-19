@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { AIChatPanel } from "@/components/ai/AIChatPanel";
 import Index from "./pages/Index";
 import Pipeline from "./pages/Pipeline";
 import Contacts from "./pages/Contacts";
@@ -72,6 +73,7 @@ const App = () => (
                           <Route path="*" element={<NotFound />} />
                         </Routes>
                       </AppLayout>
+                      <AIChatPanel />
                     </ProtectedRoute>
                   }
                 />

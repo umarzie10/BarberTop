@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { RecentDeals } from "@/components/dashboard/RecentDeals";
 import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
-import { DollarSign, Users, TrendingUp, Target, Plus } from "lucide-react";
+import { DollarSign, Users, TrendingUp, Target } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -26,9 +26,26 @@ const Dashboard = () => {
       setLoading(false);
     };
     fetchData();
+
+    // Realtime subscription for deals
+    const channel = supabase
+      .channel("dashboard-deals")
+      .on("postgres_changes", { event: "*", schema: "public", table: "deals" }, () => {
+        supabase.from("deals").select("*").order("created_at", { ascending: false }).then(({ data }) => {
+          if (data) setDeals(data);
+        });
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "contacts" }, () => {
+        supabase.from("contacts").select("*").order("created_at", { ascending: false }).then(({ data }) => {
+          if (data) setContacts(data);
+        });
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
   }, [user]);
 
-  const totalRevenue = deals.filter(d => d.stage === "won").reduce((s, d) => s + d.amount, 0);
+  const totalRevenue = deals.filter(d => d.stage === "won").reduce((s, d) => s + Number(d.amount), 0);
   const activeDeals = deals.filter(d => !["won", "lost"].includes(d.stage)).length;
   const wonDeals = deals.filter(d => d.stage === "won").length;
   const conversion = deals.length > 0 ? ((wonDeals / deals.length) * 100).toFixed(1) : "0";

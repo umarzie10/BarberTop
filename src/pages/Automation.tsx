@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Plus, Zap, Play, Pause, Clock, ArrowRight, Mail, Bell, CheckCircle, MoreHorizontal } from "lucide-react";
+import { Plus, Zap, Play, Pause, ArrowRight, Mail, Bell, CheckCircle } from "lucide-react";
+import { NewWorkflowModal } from "@/components/modals/NewWorkflowModal";
 
 interface Workflow {
   id: string;
@@ -37,9 +38,22 @@ const actionIcons: Record<string, typeof Zap> = {
 const Automation = () => {
   const { t } = useLanguage();
   const [workflows, setWorkflows] = useState(defaultWorkflows);
+  const [showNew, setShowNew] = useState(false);
 
   const toggleWorkflow = (id: string) => {
     setWorkflows((prev) => prev.map((w) => (w.id === id ? { ...w, active: !w.active } : w)));
+  };
+
+  const handleAdd = (wf: { name: string; triggerKey: string; actionKey: string }) => {
+    setWorkflows((prev) => [...prev, {
+      id: `w${Date.now()}`,
+      name: wf.name,
+      triggerKey: wf.triggerKey,
+      actionKey: wf.actionKey,
+      active: true,
+      runs: 0,
+      lastRun: null,
+    }]);
   };
 
   const activeCount = workflows.filter((w) => w.active).length;
@@ -53,13 +67,12 @@ const Automation = () => {
           <h1 className="text-xl font-semibold text-foreground tracking-tight">{t("auto.title")}</h1>
           <p className="text-sm text-muted-foreground mt-0.5">{t("auto.subtitle")}</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-md forge-transition hover:opacity-90">
+        <button onClick={() => setShowNew(true)} className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-md forge-transition hover:opacity-90">
           <Plus className="w-4 h-4" />
           {t("auto.newWorkflow")}
         </button>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-3 gap-3 mb-6">
         {[
           { label: t("auto.active"), value: activeCount, icon: Play, color: "text-success" },
@@ -76,43 +89,23 @@ const Automation = () => {
         ))}
       </div>
 
-      {/* Workflow list */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as const }}
-        className="space-y-2"
-      >
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="space-y-2">
         {workflows.map((wf) => {
           const TriggerIcon = triggerIcons[wf.triggerKey] || Zap;
           const ActionIcon = actionIcons[wf.actionKey] || Zap;
           return (
-            <div
-              key={wf.id}
-              className="bg-card border border-border rounded-lg p-4 forge-shadow-sm forge-transition forge-hover cursor-pointer"
-            >
+            <div key={wf.id} className="bg-card border border-border rounded-lg p-4 forge-shadow-sm forge-transition forge-hover cursor-pointer">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <button
-                    onClick={(e) => { e.stopPropagation(); toggleWorkflow(wf.id); }}
-                    className={`w-9 h-9 rounded-md flex items-center justify-center shrink-0 ${
-                      wf.active ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"
-                    }`}
-                  >
+                  <button onClick={(e) => { e.stopPropagation(); toggleWorkflow(wf.id); }} className={`w-9 h-9 rounded-md flex items-center justify-center shrink-0 ${wf.active ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}`}>
                     {wf.active ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
                   </button>
                   <div>
                     <p className="text-sm font-medium text-foreground">{wf.name}</p>
                     <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <TriggerIcon className="w-3 h-3" />
-                        <span>{t(wf.triggerKey)}</span>
-                      </div>
+                      <div className="flex items-center gap-1"><TriggerIcon className="w-3 h-3" /><span>{t(wf.triggerKey)}</span></div>
                       <ArrowRight className="w-3 h-3" />
-                      <div className="flex items-center gap-1">
-                        <ActionIcon className="w-3 h-3" />
-                        <span>{t(wf.actionKey)}</span>
-                      </div>
+                      <div className="flex items-center gap-1"><ActionIcon className="w-3 h-3" /><span>{t(wf.actionKey)}</span></div>
                     </div>
                   </div>
                 </div>
@@ -142,6 +135,8 @@ const Automation = () => {
           </div>
         )}
       </motion.div>
+
+      <NewWorkflowModal open={showNew} onClose={() => setShowNew(false)} onAdd={handleAdd} />
     </div>
   );
 };

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, Search, Filter, MoreHorizontal, ArrowRight } from "lucide-react";
+import { Plus, Search, Filter, MoreHorizontal } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { NewLeadModal } from "@/components/modals/NewLeadModal";
 
 const Leads = () => {
   const { t } = useLanguage();
@@ -11,14 +12,29 @@ const Leads = () => {
   const [deals, setDeals] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [showNew, setShowNew] = useState(false);
 
-  useEffect(() => {
+  const fetchLeads = async () => {
     if (!user) return;
-    supabase.from("deals").select("*").in("stage", ["lead", "qualified"]).order("created_at", { ascending: false }).then(({ data }) => {
-      setDeals(data || []);
-      setLoading(false);
+    const { data } = await supabase.from("deals").select("*").in("stage", ["lead", "qualified"]).order("created_at", { ascending: false });
+    setDeals(data || []);
+    setLoading(false);
+  };
+
+  useEffect(() => { fetchLeads(); }, [user]);
+
+  const handleAdd = async (lead: { name: string; company: string; amount: number; contactName: string }) => {
+    if (!user) return;
+    await supabase.from("deals").insert({
+      name: lead.name,
+      company: lead.company,
+      amount: lead.amount,
+      contact_name: lead.contactName || null,
+      stage: "lead",
+      user_id: user.id,
     });
-  }, [user]);
+    fetchLeads();
+  };
 
   const filtered = deals.filter(d =>
     d.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -37,7 +53,7 @@ const Leads = () => {
           <h1 className="text-xl font-semibold text-foreground tracking-tight">{t("leads.title")}</h1>
           <p className="text-sm text-muted-foreground mt-0.5">{t("leads.subtitle")}</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-md forge-transition hover:opacity-90">
+        <button onClick={() => setShowNew(true)} className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-md forge-transition hover:opacity-90">
           <Plus className="w-4 h-4" />
           {t("leads.new")}
         </button>
@@ -67,7 +83,7 @@ const Leads = () => {
         </button>
       </div>
 
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as const }} className="bg-card border border-border rounded-lg forge-shadow-sm overflow-hidden">
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="bg-card border border-border rounded-lg forge-shadow-sm overflow-hidden">
         <table className="w-full">
           <thead>
             <tr className="border-b border-border">
@@ -103,7 +119,7 @@ const Leads = () => {
                     <td className="px-5 py-3.5">
                       <span className={`text-[10px] font-medium px-2 py-1 rounded ${st.className}`}>{st.label}</span>
                     </td>
-                    <td className="px-5 py-3.5 text-sm font-mono text-foreground text-right">${deal.amount.toLocaleString()}</td>
+                    <td className="px-5 py-3.5 text-sm font-mono text-foreground text-right">${Number(deal.amount).toLocaleString()}</td>
                     <td className="px-3 py-3.5">
                       <MoreHorizontal className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 forge-transition" />
                     </td>
@@ -114,6 +130,8 @@ const Leads = () => {
           </tbody>
         </table>
       </motion.div>
+
+      <NewLeadModal open={showNew} onClose={() => setShowNew(false)} onAdd={handleAdd} />
     </div>
   );
 };
