@@ -97,6 +97,7 @@ const t: Translations = {
   "contacts.name": { uz: "Ism", ru: "Имя", en: "Name" },
   "contacts.company": { uz: "Kompaniya", ru: "Компания", en: "Company" },
   "contacts.role": { uz: "Lavozim", ru: "Должность", en: "Role" },
+  "contacts.phone": { uz: "Telefon", ru: "Телефон", en: "Phone" },
   "contacts.deals": { uz: "Bitimlar", ru: "Сделки", en: "Deals" },
   "contacts.value": { uz: "Qiymat", ru: "Стоимость", en: "Value" },
   "contacts.noContacts": { uz: "Hali kontaktlar yo'q", ru: "Пока нет контактов", en: "No contacts yet" },
@@ -133,6 +134,14 @@ const t: Translations = {
   "activities.overdue": { uz: "Muddati o'tgan", ru: "Просроченные", en: "Overdue" },
   "activities.completed": { uz: "Bajarilgan", ru: "Выполненные", en: "Completed" },
   "activities.planned": { uz: "Rejalashtirilgan", ru: "Запланированные", en: "Planned" },
+  "activities.actTitle": { uz: "Sarlavha", ru: "Заголовок", en: "Title" },
+  "activities.type": { uz: "Turi", ru: "Тип", en: "Type" },
+  "activities.task": { uz: "Vazifa", ru: "Задача", en: "Task" },
+  "activities.call": { uz: "Qo'ng'iroq", ru: "Звонок", en: "Call" },
+  "activities.meeting": { uz: "Uchrashuv", ru: "Встреча", en: "Meeting" },
+  "activities.emailAct": { uz: "Email", ru: "Email", en: "Email" },
+  "activities.desc": { uz: "Tavsif", ru: "Описание", en: "Description" },
+  "activities.dueDate": { uz: "Muddat", ru: "Срок", en: "Due Date" },
 
   // Automation
   "auto.title": { uz: "Avtomatlashtirish", ru: "Автоматизация", en: "Automation" },
@@ -153,14 +162,32 @@ const t: Translations = {
   "auto.sendEmail": { uz: "Email yuborish", ru: "Отправить email", en: "Send email" },
   "auto.assignTask": { uz: "Vazifa berish", ru: "Назначить задачу", en: "Assign task" },
   "auto.moveStage": { uz: "Bosqichni o'zgartirish", ru: "Сменить этап", en: "Change stage" },
+  "auto.wfName": { uz: "Workflow nomi", ru: "Название процесса", en: "Workflow Name" },
+  "auto.wfNamePlaceholder": { uz: "Masalan: Lead → Qualified bildirish", ru: "Например: Lead → Qualified уведомление", en: "E.g.: Lead → Qualified notification" },
 
   // Communications
   "comm.title": { uz: "Xabarlar", ru: "Сообщения", en: "Messages" },
   "comm.subtitle": { uz: "Barcha kommunikatsiyalar bir joyda", ru: "Все коммуникации в одном месте", en: "All communications in one place" },
+  "comm.placeholder": { uz: "Xabar yozing...", ru: "Напишите сообщение...", en: "Type a message..." },
+  "comm.noMessages": { uz: "Hali xabarlar yo'q", ru: "Пока нет сообщений", en: "No messages yet" },
+  "comm.selectContact": { uz: "Kontaktni tanlang", ru: "Выберите контакт", en: "Select a contact" },
 
   // Integrations
   "int.title": { uz: "Integratsiya", ru: "Интеграции", en: "Integrations" },
   "int.subtitle": { uz: "Tashqi xizmatlar bilan ulanish", ru: "Подключение внешних сервисов", en: "Connect external services" },
+  "int.connected": { uz: "Ulangan", ru: "Подключено", en: "Connected" },
+  "int.disconnected": { uz: "Ulanmagan", ru: "Отключено", en: "Disconnected" },
+  "int.connect": { uz: "Ulash", ru: "Подключить", en: "Connect" },
+  "int.disconnect": { uz: "Uzish", ru: "Отключить", en: "Disconnect" },
+  "int.active": { uz: "Faol", ru: "Активно", en: "Active" },
+  "int.available": { uz: "Mavjud integratsiyalar", ru: "Доступные интеграции", en: "Available integrations" },
+  "int.status": { uz: "Holat", ru: "Статус", en: "Status" },
+  "int.category": { uz: "Kategoriya", ru: "Категория", en: "Category" },
+
+  // AI
+  "ai.welcome": { uz: "Forge AI yordamchisi", ru: "AI ассистент Forge", en: "Forge AI Assistant" },
+  "ai.hint": { uz: "CRM, savdo va biznes bo'yicha savollar bering", ru: "Задавайте вопросы по CRM, продажам и бизнесу", en: "Ask about CRM, sales, and business" },
+  "ai.placeholder": { uz: "Savol yozing...", ru: "Задайте вопрос...", en: "Ask a question..." },
 
   // Common
   "common.filter": { uz: "Filter", ru: "Фильтр", en: "Filter" },
