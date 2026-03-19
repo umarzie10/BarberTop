@@ -14,6 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
+      activities: {
+        Row: {
+          completed_at: string | null
+          contact_id: string | null
+          created_at: string
+          deal_id: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          status: string
+          title: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          contact_id?: string | null
+          created_at?: string
+          deal_id?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          status?: string
+          title: string
+          type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          contact_id?: string | null
+          created_at?: string
+          deal_id?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          status?: string
+          title?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activities_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_chats: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contacts: {
         Row: {
           company: string
@@ -88,6 +172,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      messages: {
+        Row: {
+          channel: string
+          contact_id: string | null
+          content: string
+          created_at: string
+          direction: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          channel?: string
+          contact_id?: string | null
+          content: string
+          created_at?: string
+          direction?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          channel?: string
+          contact_id?: string | null
+          content?: string
+          created_at?: string
+          direction?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
