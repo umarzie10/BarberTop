@@ -1,52 +1,62 @@
-import { motion } from "framer-motion";
-import { Send, Search, Phone, Video, MoreHorizontal, Paperclip, Smile } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { Send, Search, Phone, Video, MoreHorizontal, Paperclip } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-interface ChatContact {
-  id: number;
-  name: string;
-  lastMessage: string;
-  time: string;
-  unread: number;
-  online: boolean;
-  channel: "chat" | "telegram" | "email";
-}
-
-interface Message {
-  id: number;
-  sender: string;
-  text: string;
-  time: string;
-  isMe: boolean;
-}
-
-const chatContacts: ChatContact[] = [
-  { id: 1, name: "Sardor Raximov", lastMessage: "Shartnomani ko'rib chiqamiz", time: "5 min", unread: 2, online: true, channel: "chat" },
-  { id: 2, name: "Nilufar Karimova", lastMessage: "Taklifni qabul qildik ✅", time: "1 soat", unread: 0, online: true, channel: "telegram" },
-  { id: 3, name: "Bobur Aliyev", lastMessage: "Ertaga uchrashamizmi?", time: "2 soat", unread: 1, online: false, channel: "chat" },
-  { id: 4, name: "Jasur Toshmatov", lastMessage: "Invoice yuborildi", time: "Kecha", unread: 0, online: false, channel: "email" },
-  { id: 5, name: "Madina Xolmatova", lastMessage: "Yangi loyiha haqida...", time: "Kecha", unread: 0, online: true, channel: "telegram" },
-  { id: 6, name: "Alisher Mirzayev", lastMessage: "Demo juda yaxshi o'tdi", time: "2 kun", unread: 0, online: false, channel: "chat" },
-];
-
-const messages: Message[] = [
-  { id: 1, sender: "Sardor Raximov", text: "Salom! Shartnoma haqida gaplashsak bo'ladimi?", time: "10:30", isMe: false },
-  { id: 2, sender: "Siz", text: "Salom Sardor! Albatta, qanday savollaringiz bor?", time: "10:32", isMe: true },
-  { id: 3, sender: "Sardor Raximov", text: "To'lov shartlarini bir ko'rib chiqmoqchimiz. 60 kunlik muddatga bo'ladimi?", time: "10:35", isMe: false },
-  { id: 4, sender: "Siz", text: "Ha, biz 30 va 60 kunlik to'lov variantlarini taklif qilamiz. Sizga qaysi biri qulay?", time: "10:37", isMe: true },
-  { id: 5, sender: "Sardor Raximov", text: "60 kunlik variant bilan ketamiz. Shartnomani ko'rib chiqamiz", time: "10:40", isMe: false },
-];
-
-const channelBadge = {
-  chat: { label: "Chat", className: "bg-primary/10 text-primary" },
-  telegram: { label: "Telegram", className: "bg-[hsl(200,80%,50%)]/10 text-[hsl(200,80%,50%)]" },
-  email: { label: "Email", className: "bg-accent/10 text-accent" },
-};
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Communications = () => {
   const { t } = useLanguage();
-  const [selectedContact, setSelectedContact] = useState(chatContacts[0]);
+  const { user } = useAuth();
+  const [contacts, setContacts] = useState<any[]>([]);
+  const [selectedContact, setSelectedContact] = useState<any>(null);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [input, setInput] = useState("");
+  const [search, setSearch] = useState("");
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("contacts").select("*").order("name").then(({ data }) => {
+      setContacts(data || []);
+      if (data && data.length > 0) setSelectedContact(data[0]);
+    });
+  }, [user]);
+
+  useEffect(() => {
+    if (!selectedContact || !user) return;
+    const fetchMessages = async () => {
+      const { data } = await supabase.from("messages").select("*").eq("contact_id", selectedContact.id).order("created_at", { ascending: true });
+      setMessages(data || []);
+    };
+    fetchMessages();
+
+    const channel = supabase
+      .channel(`messages-${selectedContact.id}`)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages", filter: `contact_id=eq.${selectedContact.id}` }, (payload) => {
+        setMessages((prev) => [...prev, payload.new]);
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [selectedContact, user]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const sendMessage = async () => {
+    if (!input.trim() || !user || !selectedContact) return;
+    await supabase.from("messages").insert({
+      user_id: user.id,
+      contact_id: selectedContact.id,
+      content: input.trim(),
+      direction: "outgoing",
+      channel: "chat",
+    });
+    setInput("");
+  };
+
+  const filtered = contacts.filter(c => c.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="h-screen flex flex-col">
@@ -56,123 +66,83 @@ const Communications = () => {
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Contact list */}
         <div className="w-[300px] border-r border-border flex flex-col shrink-0">
           <div className="p-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="Qidirish..."
-                className="w-full pl-9 pr-3 py-2 text-sm border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/20"
-              />
+              <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t("contacts.search")} className="w-full pl-9 pr-3 py-2 text-sm border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/20" />
             </div>
           </div>
           <div className="flex-1 overflow-y-auto">
-            {chatContacts.map((c) => (
+            {filtered.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-8">{t("contacts.noContacts")}</p>
+            ) : filtered.map((c) => (
               <button
                 key={c.id}
                 onClick={() => setSelectedContact(c)}
-                className={`w-full px-4 py-3 flex items-start gap-3 text-left forge-transition ${
-                  selectedContact.id === c.id ? "bg-muted" : "hover:bg-muted/50"
-                }`}
+                className={`w-full px-4 py-3 flex items-start gap-3 text-left forge-transition ${selectedContact?.id === c.id ? "bg-muted" : "hover:bg-muted/50"}`}
               >
-                <div className="relative shrink-0">
-                  <div className="w-9 h-9 rounded-md bg-primary/10 flex items-center justify-center text-xs font-semibold text-primary">
-                    {c.name.split(" ").map(n => n[0]).join("")}
-                  </div>
-                  {c.online && (
-                    <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-success rounded-full border-2 border-background" />
-                  )}
+                <div className="w-9 h-9 rounded-md bg-primary/10 flex items-center justify-center text-xs font-semibold text-primary shrink-0">
+                  {c.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-0.5">
-                    <p className="text-sm font-medium text-foreground truncate">{c.name}</p>
-                    <span className="text-[10px] text-muted-foreground shrink-0">{c.time}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-muted-foreground truncate">{c.lastMessage}</p>
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      {c.unread > 0 && (
-                        <span className="bg-primary text-primary-foreground text-[10px] font-semibold w-4 h-4 rounded-full flex items-center justify-center">{c.unread}</span>
-                      )}
-                      <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded ${channelBadge[c.channel].className}`}>
-                        {channelBadge[c.channel].label}
-                      </span>
-                    </div>
-                  </div>
+                  <p className="text-sm font-medium text-foreground truncate">{c.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{c.company}</p>
                 </div>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Chat area */}
         <div className="flex-1 flex flex-col">
-          {/* Chat header */}
-          <div className="px-5 py-3 border-b border-border flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center text-xs font-semibold text-primary">
-                {selectedContact.name.split(" ").map(n => n[0]).join("")}
-              </div>
-              <div>
-                <p className="text-sm font-medium text-foreground">{selectedContact.name}</p>
-                <p className="text-[11px] text-muted-foreground">
-                  {selectedContact.online ? "Online" : "Oxirgi faollik: " + selectedContact.time + " oldin"}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <button className="p-2 hover:bg-muted rounded-md forge-transition">
-                <Phone className="w-4 h-4 text-muted-foreground" />
-              </button>
-              <button className="p-2 hover:bg-muted rounded-md forge-transition">
-                <Video className="w-4 h-4 text-muted-foreground" />
-              </button>
-              <button className="p-2 hover:bg-muted rounded-md forge-transition">
-                <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
-              </button>
-            </div>
-          </div>
-
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-5 space-y-3">
-            {messages.map((msg) => (
-              <motion.div
-                key={msg.id}
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`flex ${msg.isMe ? "justify-end" : "justify-start"}`}
-              >
-                <div className={`max-w-[70%] px-4 py-2.5 rounded-lg ${
-                  msg.isMe ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
-                }`}>
-                  <p className="text-sm">{msg.text}</p>
-                  <p className={`text-[10px] mt-1 ${msg.isMe ? "text-primary-foreground/60" : "text-muted-foreground"}`}>{msg.time}</p>
+          {selectedContact ? (
+            <>
+              <div className="px-5 py-3 border-b border-border flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center text-xs font-semibold text-primary">
+                    {selectedContact.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{selectedContact.name}</p>
+                    <p className="text-[11px] text-muted-foreground">{selectedContact.company}</p>
+                  </div>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+                <div className="flex items-center gap-1.5">
+                  <button className="p-2 hover:bg-muted rounded-md forge-transition"><Phone className="w-4 h-4 text-muted-foreground" /></button>
+                  <button className="p-2 hover:bg-muted rounded-md forge-transition"><Video className="w-4 h-4 text-muted-foreground" /></button>
+                </div>
+              </div>
 
-          {/* Input */}
-          <div className="px-5 py-3 border-t border-border">
-            <div className="flex items-center gap-2">
-              <button className="p-2 hover:bg-muted rounded-md forge-transition">
-                <Paperclip className="w-4 h-4 text-muted-foreground" />
-              </button>
-              <input
-                type="text"
-                placeholder="Xabar yozing..."
-                className="flex-1 px-3 py-2 text-sm border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/20"
-              />
-              <button className="p-2 hover:bg-muted rounded-md forge-transition">
-                <Smile className="w-4 h-4 text-muted-foreground" />
-              </button>
-              <button className="p-2 bg-primary text-primary-foreground rounded-md forge-transition hover:opacity-90">
-                <Send className="w-4 h-4" />
-              </button>
+              <div className="flex-1 overflow-y-auto p-5 space-y-3">
+                {messages.length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-8">{t("comm.noMessages")}</p>
+                )}
+                {messages.map((msg) => (
+                  <div key={msg.id} className={`flex ${msg.direction === "outgoing" ? "justify-end" : "justify-start"}`}>
+                    <div className={`max-w-[70%] px-4 py-2.5 rounded-lg ${msg.direction === "outgoing" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}>
+                      <p className="text-sm">{msg.content}</p>
+                      <p className={`text-[10px] mt-1 ${msg.direction === "outgoing" ? "text-primary-foreground/60" : "text-muted-foreground"}`}>
+                        {new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                <div ref={bottomRef} />
+              </div>
+
+              <div className="px-5 py-3 border-t border-border">
+                <form onSubmit={(e) => { e.preventDefault(); sendMessage(); }} className="flex items-center gap-2">
+                  <button type="button" className="p-2 hover:bg-muted rounded-md forge-transition"><Paperclip className="w-4 h-4 text-muted-foreground" /></button>
+                  <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder={t("comm.placeholder")} className="flex-1 px-3 py-2 text-sm border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/20" />
+                  <button type="submit" disabled={!input.trim()} className="p-2 bg-primary text-primary-foreground rounded-md forge-transition hover:opacity-90 disabled:opacity-50"><Send className="w-4 h-4" /></button>
+                </form>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex items-center justify-center">
+              <p className="text-sm text-muted-foreground">{t("comm.selectContact")}</p>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
