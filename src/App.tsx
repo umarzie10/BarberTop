@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { WorkspaceProvider } from "@/contexts/WorkspaceContext";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { AIChatPanel } from "@/components/ai/AIChatPanel";
 import Index from "./pages/Index";
@@ -20,6 +21,10 @@ import Automation from "./pages/Automation";
 import Auth from "./pages/Auth";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import WorkspaceSelector from "./pages/WorkspaceSelector";
+import EducationModule from "./pages/modules/EducationModule";
+import GovernmentModule from "./pages/modules/GovernmentModule";
+import HealthcareModule from "./pages/modules/HealthcareModule";
 
 const queryClient = new QueryClient();
 
@@ -47,40 +52,46 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <LanguageProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AuthProvider>
-              <Routes>
-                <Route path="/auth" element={<AuthRoute><Auth /></AuthRoute>} />
-                <Route
-                  path="/*"
-                  element={
-                    <ProtectedRoute>
-                      <AppLayout>
-                        <Routes>
-                          <Route path="/" element={<Index />} />
-                          <Route path="/pipeline" element={<Pipeline />} />
-                          <Route path="/contacts" element={<Contacts />} />
-                          <Route path="/analytics" element={<Analytics />} />
-                          <Route path="/leads" element={<Leads />} />
-                          <Route path="/activities" element={<Activities />} />
-                          <Route path="/communications" element={<Communications />} />
-                          <Route path="/integrations" element={<Integrations />} />
-                          <Route path="/automation" element={<Automation />} />
-                          <Route path="/settings" element={<Settings />} />
-                          <Route path="*" element={<NotFound />} />
-                        </Routes>
-                      </AppLayout>
-                      <AIChatPanel />
-                    </ProtectedRoute>
-                  }
-                />
-              </Routes>
-            </AuthProvider>
-          </BrowserRouter>
-        </TooltipProvider>
+        <WorkspaceProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <AuthProvider>
+                <Routes>
+                  <Route path="/auth" element={<AuthRoute><Auth /></AuthRoute>} />
+                  <Route
+                    path="/*"
+                    element={
+                      <ProtectedRoute>
+                        <AppLayout>
+                          <Routes>
+                            <Route path="/" element={<Index />} />
+                            <Route path="/pipeline" element={<Pipeline />} />
+                            <Route path="/contacts" element={<Contacts />} />
+                            <Route path="/analytics" element={<Analytics />} />
+                            <Route path="/leads" element={<Leads />} />
+                            <Route path="/activities" element={<Activities />} />
+                            <Route path="/communications" element={<Communications />} />
+                            <Route path="/integrations" element={<Integrations />} />
+                            <Route path="/automation" element={<Automation />} />
+                            <Route path="/settings" element={<Settings />} />
+                            <Route path="/workspace" element={<WorkspaceSelector />} />
+                            <Route path="/education" element={<EducationModule />} />
+                            <Route path="/government" element={<GovernmentModule />} />
+                            <Route path="/healthcare" element={<HealthcareModule />} />
+                            <Route path="*" element={<NotFound />} />
+                          </Routes>
+                        </AppLayout>
+                        <AIChatPanel />
+                      </ProtectedRoute>
+                    }
+                  />
+                </Routes>
+              </AuthProvider>
+            </BrowserRouter>
+          </TooltipProvider>
+        </WorkspaceProvider>
       </LanguageProvider>
     </ThemeProvider>
   </QueryClientProvider>
