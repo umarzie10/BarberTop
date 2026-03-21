@@ -189,6 +189,48 @@ const t: Translations = {
   "ai.hint": { uz: "CRM, savdo va biznes bo'yicha savollar bering", ru: "Задавайте вопросы по CRM, продажам и бизнесу", en: "Ask about CRM, sales, and business" },
   "ai.placeholder": { uz: "Savol yozing...", ru: "Задайте вопрос...", en: "Ask a question..." },
 
+  // Workspace Dashboard
+  "wdash.subtitle.sales": { uz: "Savdo va bitimlarni boshqaring", ru: "Управление продажами и сделками", en: "Manage sales and deals" },
+  "wdash.subtitle.education": { uz: "Talabalar, kurslar va to'lovlarni kuzating", ru: "Отслеживание студентов, курсов и платежей", en: "Track students, courses and payments" },
+  "wdash.subtitle.government": { uz: "Murojaatlar va hududiy nazorat", ru: "Обращения и региональный контроль", en: "Complaints and regional control" },
+  "wdash.subtitle.healthcare": { uz: "Bemorlar, navbat va tibbiy xizmatlar", ru: "Пациенты, очередь и медицинские услуги", en: "Patients, queue and medical services" },
+  "wdash.subtitle.realestate": { uz: "Ko'chmas mulk va xaridorlarni boshqarish", ru: "Управление недвижимостью и покупателями", en: "Manage properties and buyers" },
+  "wdash.subtitle.logistics": { uz: "Buyurtmalar va yetkazib berishni kuzating", ru: "Отслеживание заказов и доставки", en: "Track orders and delivery" },
+  "wdash.subtitle.ecommerce": { uz: "Onlayn buyurtmalar va mijozlar", ru: "Онлайн заказы и клиенты", en: "Online orders and customers" },
+  "wdash.subtitle.support": { uz: "Ticketlar va mijoz muammolarini hal qilish", ru: "Тикеты и решение проблем клиентов", en: "Tickets and resolving client issues" },
+  "wdash.subtitle.finance": { uz: "Moliyaviy operatsiyalar va to'lovlar", ru: "Финансовые операции и платежи", en: "Financial operations and payments" },
+  "wdash.subtitle.production": { uz: "Ishlab chiqarish jarayoni va ombor", ru: "Производственный процесс и склад", en: "Production process and warehouse" },
+
+  // Education dashboard
+  "wdash.students": { uz: "Talabalar", ru: "Студенты", en: "Students" },
+  "wdash.courses": { uz: "Kurslar", ru: "Курсы", en: "Courses" },
+  "wdash.payments": { uz: "To'lovlar", ru: "Платежи", en: "Payments" },
+  "wdash.activeStudents": { uz: "Faol talabalar", ru: "Активные студенты", en: "Active Students" },
+  "wdash.studentsByStage": { uz: "Bosqichlar bo'yicha talabalar", ru: "Студенты по этапам", en: "Students by Stage" },
+  "wdash.recentStudents": { uz: "So'nggi talabalar", ru: "Последние студенты", en: "Recent Students" },
+
+  // Government dashboard
+  "wdash.totalComplaints": { uz: "Jami murojaatlar", ru: "Всего обращений", en: "Total Complaints" },
+  "wdash.resolved": { uz: "Hal qilingan", ru: "Решённые", en: "Resolved" },
+  "wdash.pending": { uz: "Kutilmoqda", ru: "В ожидании", en: "Pending" },
+  "wdash.rejected": { uz: "Rad etilgan", ru: "Отклонённые", en: "Rejected" },
+  "wdash.regions": { uz: "Hududlar", ru: "Регионы", en: "Regions" },
+  "wdash.complaintStatus": { uz: "Murojaatlar holati", ru: "Статус обращений", en: "Complaint Status" },
+  "wdash.byRegion": { uz: "Hududlar bo'yicha", ru: "По регионам", en: "By Region" },
+
+  // Healthcare dashboard
+  "wdash.patients": { uz: "Bemorlar", ru: "Пациенты", en: "Patients" },
+  "wdash.appointments": { uz: "Navbatlar", ru: "Приёмы", en: "Appointments" },
+  "wdash.completedVisits": { uz: "Yakunlangan tashriflar", ru: "Завершённые визиты", en: "Completed Visits" },
+  "wdash.doctors": { uz: "Shifokorlar", ru: "Врачи", en: "Doctors" },
+  "wdash.recentPatients": { uz: "So'nggi bemorlar", ru: "Последние пациенты", en: "Recent Patients" },
+
+  // Generic dashboard
+  "wdash.totalRecords": { uz: "Jami yozuvlar", ru: "Всего записей", en: "Total Records" },
+  "wdash.active": { uz: "Faol", ru: "Активные", en: "Active" },
+  "wdash.completed": { uz: "Yakunlangan", ru: "Завершённые", en: "Completed" },
+  "wdash.contacts": { uz: "Kontaktlar", ru: "Контакты", en: "Contacts" },
+
   // Common
   "common.filter": { uz: "Filter", ru: "Фильтр", en: "Filter" },
   "common.all": { uz: "Barchasi", ru: "Все", en: "All" },
