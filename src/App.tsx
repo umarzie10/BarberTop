@@ -25,6 +25,12 @@ import WorkspaceSelector from "./pages/WorkspaceSelector";
 import EducationModule from "./pages/modules/EducationModule";
 import GovernmentModule from "./pages/modules/GovernmentModule";
 import HealthcareModule from "./pages/modules/HealthcareModule";
+import RealEstateModule from "./pages/modules/RealEstateModule";
+import LogisticsModule from "./pages/modules/LogisticsModule";
+import EcommerceModule from "./pages/modules/EcommerceModule";
+import SupportModule from "./pages/modules/SupportModule";
+import FinanceModule from "./pages/modules/FinanceModule";
+import ProductionModule from "./pages/modules/ProductionModule";
 
 const queryClient = new QueryClient();
 
@@ -80,6 +86,12 @@ const App = () => (
                             <Route path="/education" element={<EducationModule />} />
                             <Route path="/government" element={<GovernmentModule />} />
                             <Route path="/healthcare" element={<HealthcareModule />} />
+                            <Route path="/realestate" element={<RealEstateModule />} />
+                            <Route path="/logistics" element={<LogisticsModule />} />
+                            <Route path="/ecommerce" element={<EcommerceModule />} />
+                            <Route path="/support" element={<SupportModule />} />
+                            <Route path="/finance" element={<FinanceModule />} />
+                            <Route path="/production" element={<ProductionModule />} />
                             <Route path="*" element={<NotFound />} />
                           </Routes>
                         </AppLayout>
