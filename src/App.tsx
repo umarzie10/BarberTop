@@ -25,6 +25,12 @@ import WorkspaceSelector from "./pages/WorkspaceSelector";
 import EducationModule from "./pages/modules/EducationModule";
 import GovernmentModule from "./pages/modules/GovernmentModule";
 import HealthcareModule from "./pages/modules/HealthcareModule";
+import RealEstateModule from "./pages/modules/RealEstateModule";
+import LogisticsModule from "./pages/modules/LogisticsModule";
+import EcommerceModule from "./pages/modules/EcommerceModule";
+import SupportModule from "./pages/modules/SupportModule";
+import FinanceModule from "./pages/modules/FinanceModule";
+import ProductionModule from "./pages/modules/ProductionModule";
 
 const queryClient = new QueryClient();
 
