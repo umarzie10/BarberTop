@@ -86,6 +86,12 @@ const App = () => (
                             <Route path="/education" element={<EducationModule />} />
                             <Route path="/government" element={<GovernmentModule />} />
                             <Route path="/healthcare" element={<HealthcareModule />} />
+                            <Route path="/realestate" element={<RealEstateModule />} />
+                            <Route path="/logistics" element={<LogisticsModule />} />
+                            <Route path="/ecommerce" element={<EcommerceModule />} />
+                            <Route path="/support" element={<SupportModule />} />
+                            <Route path="/finance" element={<FinanceModule />} />
+                            <Route path="/production" element={<ProductionModule />} />
                             <Route path="*" element={<NotFound />} />
                           </Routes>
                         </AppLayout>
