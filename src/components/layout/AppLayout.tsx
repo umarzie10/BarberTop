@@ -1,19 +1,11 @@
 import { ReactNode } from "react";
 import { AppSidebar } from "./AppSidebar";
-import { CommandMenu } from "../command/CommandMenu";
 
-interface AppLayoutProps {
-  children: ReactNode;
-}
-
-export const AppLayout = ({ children }: AppLayoutProps) => {
+export const AppLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="min-h-screen bg-background">
       <AppSidebar />
-      <main className="ml-[240px] min-h-screen">
-        {children}
-      </main>
-      <CommandMenu />
+      <main className="md:ml-[240px] min-h-screen pt-14 md:pt-0">{children}</main>
     </div>
   );
 };
