@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
       }
 
       if (!userId) {
-        results.push({ email: u.email, status: "error", error: createErr?.message });
+        results.push({ email: u.email, status: "error", error: "no user id" });
         continue;
       }
 
