@@ -23,25 +23,22 @@ Deno.serve(async (req) => {
 
   for (const u of SEED) {
     try {
-      // Try to create user
-      const { data: created, error: createErr } = await supabase.auth.admin.createUser({
-        email: u.email,
-        password: u.password,
-        email_confirm: true,
-        user_metadata: { full_name: u.full_name },
-      });
+      // First, look up if user already exists
+      const { data: list } = await supabase.auth.admin.listUsers();
+      const existing = list?.users.find((x) => x.email === u.email);
+      let userId: string | undefined = existing?.id;
 
-      let userId = created?.user?.id;
-
-      if (createErr && !userId) {
-        // Likely already exists — find them
-        const { data: list } = await supabase.auth.admin.listUsers();
-        const existing = list?.users.find((x) => x.email === u.email);
-        if (existing) {
-          userId = existing.id;
-          // reset password
-          await supabase.auth.admin.updateUserById(existing.id, { password: u.password, email_confirm: true });
-        }
+      if (existing) {
+        await supabase.auth.admin.updateUserById(existing.id, { password: u.password, email_confirm: true });
+      } else {
+        const { data: created, error: createErr } = await supabase.auth.admin.createUser({
+          email: u.email,
+          password: u.password,
+          email_confirm: true,
+          user_metadata: { full_name: u.full_name },
+        });
+        userId = created?.user?.id;
+        if (createErr) console.error("createUser error:", u.email, createErr.message);
       }
 
       if (!userId) {
