@@ -14,66 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      activities: {
-        Row: {
-          completed_at: string | null
-          contact_id: string | null
-          created_at: string
-          deal_id: string | null
-          description: string | null
-          due_date: string | null
-          id: string
-          status: string
-          title: string
-          type: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          completed_at?: string | null
-          contact_id?: string | null
-          created_at?: string
-          deal_id?: string | null
-          description?: string | null
-          due_date?: string | null
-          id?: string
-          status?: string
-          title: string
-          type?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          completed_at?: string | null
-          contact_id?: string | null
-          created_at?: string
-          deal_id?: string | null
-          description?: string | null
-          due_date?: string | null
-          id?: string
-          status?: string
-          title?: string
-          type?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "activities_contact_id_fkey"
-            columns: ["contact_id"]
-            isOneToOne: false
-            referencedRelation: "contacts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "activities_deal_id_fkey"
-            columns: ["deal_id"]
-            isOneToOne: false
-            referencedRelation: "deals"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       ai_chats: {
         Row: {
           content: string
@@ -98,78 +38,111 @@ export type Database = {
         }
         Relationships: []
       }
-      contacts: {
+      appointments: {
         Row: {
-          company: string
+          appointment_date: string
+          appointment_time: string
+          barber_id: string
+          client_id: string
+          client_name: string | null
+          client_phone: string | null
           created_at: string
-          email: string | null
           id: string
-          name: string
-          phone: string | null
-          role: string | null
+          notes: string | null
+          service_id: string
+          status: Database["public"]["Enums"]["appointment_status"]
+          total_price: number
           updated_at: string
-          user_id: string
         }
         Insert: {
-          company: string
+          appointment_date: string
+          appointment_time: string
+          barber_id: string
+          client_id: string
+          client_name?: string | null
+          client_phone?: string | null
           created_at?: string
-          email?: string | null
           id?: string
-          name: string
-          phone?: string | null
-          role?: string | null
+          notes?: string | null
+          service_id: string
+          status?: Database["public"]["Enums"]["appointment_status"]
+          total_price?: number
           updated_at?: string
-          user_id: string
         }
         Update: {
-          company?: string
+          appointment_date?: string
+          appointment_time?: string
+          barber_id?: string
+          client_id?: string
+          client_name?: string | null
+          client_phone?: string | null
           created_at?: string
-          email?: string | null
           id?: string
-          name?: string
-          phone?: string | null
-          role?: string | null
+          notes?: string | null
+          service_id?: string
+          status?: Database["public"]["Enums"]["appointment_status"]
+          total_price?: number
           updated_at?: string
-          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "appointments_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      deals: {
+      barbers: {
         Row: {
-          amount: number
-          company: string
-          contact_name: string | null
+          active: boolean
+          bio: string | null
           created_at: string
-          days_in_stage: number
+          full_name: string
           id: string
-          name: string
-          stage: string
+          photo_url: string | null
+          rating: number | null
+          specialty: string | null
           updated_at: string
-          user_id: string
+          user_id: string | null
+          work_end: string | null
+          work_start: string | null
         }
         Insert: {
-          amount?: number
-          company: string
-          contact_name?: string | null
+          active?: boolean
+          bio?: string | null
           created_at?: string
-          days_in_stage?: number
+          full_name: string
           id?: string
-          name: string
-          stage?: string
+          photo_url?: string | null
+          rating?: number | null
+          specialty?: string | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
+          work_end?: string | null
+          work_start?: string | null
         }
         Update: {
-          amount?: number
-          company?: string
-          contact_name?: string | null
+          active?: boolean
+          bio?: string | null
           created_at?: string
-          days_in_stage?: number
+          full_name?: string
           id?: string
-          name?: string
-          stage?: string
+          photo_url?: string | null
+          rating?: number | null
+          specialty?: string | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
+          work_end?: string | null
+          work_start?: string | null
         }
         Relationships: []
       }
@@ -201,12 +174,45 @@ export type Database = {
           id?: string
           user_id?: string
         }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          appointment_id: string | null
+          created_at: string
+          id: string
+          method: string
+          notes: string | null
+          paid_at: string
+          recorded_by: string | null
+        }
+        Insert: {
+          amount: number
+          appointment_id?: string | null
+          created_at?: string
+          id?: string
+          method?: string
+          notes?: string | null
+          paid_at?: string
+          recorded_by?: string | null
+        }
+        Update: {
+          amount?: number
+          appointment_id?: string | null
+          created_at?: string
+          id?: string
+          method?: string
+          notes?: string | null
+          paid_at?: string
+          recorded_by?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: "messages_contact_id_fkey"
-            columns: ["contact_id"]
+            foreignKeyName: "payments_appointment_id_fkey"
+            columns: ["appointment_id"]
             isOneToOne: false
-            referencedRelation: "contacts"
+            referencedRelation: "appointments"
             referencedColumns: ["id"]
           },
         ]
@@ -215,44 +221,83 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string
-          display_name: string | null
+          full_name: string | null
           id: string
-          role: string | null
+          phone: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
-          display_name?: string | null
+          full_name?: string | null
           id?: string
-          role?: string | null
+          phone?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
-          display_name?: string | null
+          full_name?: string | null
           id?: string
-          role?: string | null
+          phone?: string | null
           updated_at?: string
           user_id?: string
         }
         Relationships: []
       }
+      services: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string | null
+          duration_minutes: number
+          id: string
+          image_url: string | null
+          name: string
+          price: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          image_url?: string | null
+          name: string
+          price?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          image_url?: string | null
+          name?: string
+          price?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
+          created_at: string
           id: string
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Insert: {
+          created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Update: {
+          created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
@@ -277,7 +322,13 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "crm_manager" | "team_leader" | "employee" | "guest"
+      app_role: "admin" | "barber" | "client"
+      appointment_status:
+        | "pending"
+        | "confirmed"
+        | "completed"
+        | "cancelled"
+        | "no_show"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -405,7 +456,14 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "crm_manager", "team_leader", "employee", "guest"],
+      app_role: ["admin", "barber", "client"],
+      appointment_status: [
+        "pending",
+        "confirmed",
+        "completed",
+        "cancelled",
+        "no_show",
+      ],
     },
   },
 } as const

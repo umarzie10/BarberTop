@@ -6,43 +6,24 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import { WorkspaceProvider } from "@/contexts/WorkspaceContext";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { AIChatPanel } from "@/components/ai/AIChatPanel";
 import Index from "./pages/Index";
-import Pipeline from "./pages/Pipeline";
-import Contacts from "./pages/Contacts";
-import Analytics from "./pages/Analytics";
-import Leads from "./pages/Leads";
-import Activities from "./pages/Activities";
-import Communications from "./pages/Communications";
-import Integrations from "./pages/Integrations";
-import Automation from "./pages/Automation";
 import Auth from "./pages/Auth";
-import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-import WorkspaceSelector from "./pages/WorkspaceSelector";
-import EducationModule from "./pages/modules/EducationModule";
-import GovernmentModule from "./pages/modules/GovernmentModule";
-import HealthcareModule from "./pages/modules/HealthcareModule";
-import RealEstateModule from "./pages/modules/RealEstateModule";
-import LogisticsModule from "./pages/modules/LogisticsModule";
-import EcommerceModule from "./pages/modules/EcommerceModule";
-import SupportModule from "./pages/modules/SupportModule";
-import FinanceModule from "./pages/modules/FinanceModule";
-import ProductionModule from "./pages/modules/ProductionModule";
+import Appointments from "./pages/Appointments";
+import Services from "./pages/Services";
+import Barbers from "./pages/Barbers";
+import Clients from "./pages/Clients";
+import Payments from "./pages/Payments";
+import Book from "./pages/Book";
+import MyBookings from "./pages/MyBookings";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-background"><div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>;
   if (!user) return <Navigate to="/auth" replace />;
   return <>{children}</>;
 }
@@ -58,52 +39,35 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <LanguageProvider>
-        <WorkspaceProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <AuthProvider>
-                <Routes>
-                  <Route path="/auth" element={<AuthRoute><Auth /></AuthRoute>} />
-                  <Route
-                    path="/*"
-                    element={
-                      <ProtectedRoute>
-                        <AppLayout>
-                          <Routes>
-                            <Route path="/" element={<Index />} />
-                            <Route path="/pipeline" element={<Pipeline />} />
-                            <Route path="/contacts" element={<Contacts />} />
-                            <Route path="/analytics" element={<Analytics />} />
-                            <Route path="/leads" element={<Leads />} />
-                            <Route path="/activities" element={<Activities />} />
-                            <Route path="/communications" element={<Communications />} />
-                            <Route path="/integrations" element={<Integrations />} />
-                            <Route path="/automation" element={<Automation />} />
-                            <Route path="/settings" element={<Settings />} />
-                            <Route path="/workspace" element={<WorkspaceSelector />} />
-                            <Route path="/education" element={<EducationModule />} />
-                            <Route path="/government" element={<GovernmentModule />} />
-                            <Route path="/healthcare" element={<HealthcareModule />} />
-                            <Route path="/realestate" element={<RealEstateModule />} />
-                            <Route path="/logistics" element={<LogisticsModule />} />
-                            <Route path="/ecommerce" element={<EcommerceModule />} />
-                            <Route path="/support" element={<SupportModule />} />
-                            <Route path="/finance" element={<FinanceModule />} />
-                            <Route path="/production" element={<ProductionModule />} />
-                            <Route path="*" element={<NotFound />} />
-                          </Routes>
-                        </AppLayout>
-                        <AIChatPanel />
-                      </ProtectedRoute>
-                    }
-                  />
-                </Routes>
-              </AuthProvider>
-            </BrowserRouter>
-          </TooltipProvider>
-        </WorkspaceProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AuthProvider>
+              <Routes>
+                <Route path="/auth" element={<AuthRoute><Auth /></AuthRoute>} />
+                <Route path="/*" element={
+                  <ProtectedRoute>
+                    <AppLayout>
+                      <Routes>
+                        <Route path="/" element={<Index />} />
+                        <Route path="/appointments" element={<Appointments />} />
+                        <Route path="/services" element={<Services />} />
+                        <Route path="/barbers" element={<Barbers />} />
+                        <Route path="/clients" element={<Clients />} />
+                        <Route path="/payments" element={<Payments />} />
+                        <Route path="/book" element={<Book />} />
+                        <Route path="/my-bookings" element={<MyBookings />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </AppLayout>
+                  </ProtectedRoute>
+                } />
+              </Routes>
+            </AuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
       </LanguageProvider>
     </ThemeProvider>
   </QueryClientProvider>
