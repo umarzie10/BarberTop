@@ -18,6 +18,10 @@ import Payments from "./pages/Payments";
 import Book from "./pages/Book";
 import MyBookings from "./pages/MyBookings";
 import Profile from "./pages/Profile";
+import Plans from "./pages/Plans";
+import Messages from "./pages/Messages";
+import BarberDetail from "./pages/BarberDetail";
+import { AIChatPanel } from "./components/ai/AIChatPanel";
 
 const queryClient = new QueryClient();
 
@@ -54,13 +58,17 @@ const App = () => (
                         <Route path="/appointments" element={<Appointments />} />
                         <Route path="/services" element={<Services />} />
                         <Route path="/barbers" element={<Barbers />} />
+                        <Route path="/barbers/:id" element={<BarberDetail />} />
                         <Route path="/clients" element={<Clients />} />
                         <Route path="/payments" element={<Payments />} />
                         <Route path="/book" element={<Book />} />
                         <Route path="/my-bookings" element={<MyBookings />} />
                         <Route path="/profile" element={<Profile />} />
+                        <Route path="/plans" element={<Plans />} />
+                        <Route path="/messages" element={<Messages />} />
                         <Route path="*" element={<NotFound />} />
                       </Routes>
+                      <AIChatPanel />
                     </AppLayout>
                   </ProtectedRoute>
                 } />
