@@ -38,6 +38,62 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_conversations: {
+        Row: {
+          created_at: string
+          id: string
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ai_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          role: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          role: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "ai_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       appointments: {
         Row: {
           appointment_date: string
@@ -101,6 +157,79 @@ export type Database = {
           },
         ]
       }
+      barber_portfolio: {
+        Row: {
+          barber_id: string
+          caption: string | null
+          created_at: string
+          id: string
+          image_url: string
+        }
+        Insert: {
+          barber_id: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+        }
+        Update: {
+          barber_id?: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "barber_portfolio_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      barber_schedule: {
+        Row: {
+          barber_id: string
+          break_end: string | null
+          break_start: string | null
+          day_of_week: number
+          end_time: string
+          id: string
+          is_off: boolean
+          start_time: string
+        }
+        Insert: {
+          barber_id: string
+          break_end?: string | null
+          break_start?: string | null
+          day_of_week: number
+          end_time?: string
+          id?: string
+          is_off?: boolean
+          start_time?: string
+        }
+        Update: {
+          barber_id?: string
+          break_end?: string | null
+          break_start?: string | null
+          day_of_week?: number
+          end_time?: string
+          id?: string
+          is_off?: boolean
+          start_time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "barber_schedule_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       barbers: {
         Row: {
           active: boolean
@@ -143,6 +272,62 @@ export type Database = {
           user_id?: string | null
           work_end?: string | null
           work_start?: string | null
+        }
+        Relationships: []
+      }
+      chat_messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          sender_id: string
+          thread_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          sender_id: string
+          thread_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          sender_id?: string
+          thread_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "chat_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_threads: {
+        Row: {
+          barber_user_id: string
+          client_id: string
+          created_at: string
+          id: string
+          last_message_at: string
+        }
+        Insert: {
+          barber_user_id: string
+          client_id: string
+          created_at?: string
+          id?: string
+          last_message_at?: string
+        }
+        Update: {
+          barber_user_id?: string
+          client_id?: string
+          created_at?: string
+          id?: string
+          last_message_at?: string
         }
         Relationships: []
       }
@@ -247,6 +432,51 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          appointment_id: string | null
+          barber_id: string
+          client_id: string
+          comment: string | null
+          created_at: string
+          id: string
+          rating: number
+        }
+        Insert: {
+          appointment_id?: string | null
+          barber_id: string
+          client_id: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating: number
+        }
+        Update: {
+          appointment_id?: string | null
+          barber_id?: string
+          client_id?: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       services: {
         Row: {
           active: boolean
@@ -283,6 +513,48 @@ export type Database = {
         }
         Relationships: []
       }
+      subscription_plans: {
+        Row: {
+          active: boolean
+          audience: string
+          badge: string | null
+          code: string
+          created_at: string
+          duration_days: number
+          features: Json
+          id: string
+          name: string
+          price: number
+          sort_order: number
+        }
+        Insert: {
+          active?: boolean
+          audience: string
+          badge?: string | null
+          code: string
+          created_at?: string
+          duration_days?: number
+          features?: Json
+          id?: string
+          name: string
+          price?: number
+          sort_order?: number
+        }
+        Update: {
+          active?: boolean
+          audience?: string
+          badge?: string | null
+          code?: string
+          created_at?: string
+          duration_days?: number
+          features?: Json
+          id?: string
+          name?: string
+          price?: number
+          sort_order?: number
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -304,11 +576,50 @@ export type Database = {
         }
         Relationships: []
       }
+      user_subscriptions: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          plan_id: string
+          started_at: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          plan_id: string
+          started_at?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          plan_id?: string
+          started_at?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      get_active_plan: { Args: { _user_id: string }; Returns: string }
       get_user_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]

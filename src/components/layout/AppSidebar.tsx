@@ -5,7 +5,7 @@ import { useLanguage, langLabels, type Language } from "@/contexts/LanguageConte
 import { useTheme } from "@/contexts/ThemeContext";
 import {
   LayoutDashboard, Calendar, Scissors, Users, DollarSign, LogOut,
-  Sun, Moon, User, Globe, Sparkles, BookOpen,
+  Sun, Moon, User, Globe, Sparkles, BookOpen, MessageCircle, Crown,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -25,16 +25,23 @@ export const AppSidebar = () => {
     { icon: User, label: t("nav.barbers"), path: "/barbers" },
     { icon: Users, label: t("nav.clients"), path: "/clients" },
     { icon: DollarSign, label: t("nav.payments"), path: "/payments" },
+    { icon: Crown, label: t("nav.plans"), path: "/plans" },
+    { icon: MessageCircle, label: t("nav.messages"), path: "/messages" },
   ];
   const barberNav = [
     { icon: LayoutDashboard, label: t("nav.dashboard"), path: "/" },
     { icon: Calendar, label: t("nav.appointments"), path: "/appointments" },
+    { icon: MessageCircle, label: t("nav.messages"), path: "/messages" },
+    { icon: Crown, label: t("nav.plans"), path: "/plans" },
     { icon: User, label: t("nav.profile"), path: "/profile" },
   ];
   const clientNav = [
     { icon: LayoutDashboard, label: t("nav.dashboard"), path: "/" },
     { icon: BookOpen, label: t("nav.book"), path: "/book" },
+    { icon: User, label: t("nav.barbers"), path: "/barbers" },
     { icon: Calendar, label: t("nav.myBookings"), path: "/my-bookings" },
+    { icon: MessageCircle, label: t("nav.messages"), path: "/messages" },
+    { icon: Crown, label: t("nav.plans"), path: "/plans" },
     { icon: User, label: t("nav.profile"), path: "/profile" },
   ];
 

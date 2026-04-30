@@ -100,6 +100,38 @@ const t: Translations = {
   "field.amount": { uz: "Summa", ru: "Сумма", en: "Amount" },
   "field.date": { uz: "Sana", ru: "Дата", en: "Date" },
   "field.time": { uz: "Vaqt", ru: "Время", en: "Time" },
+
+  // Plans
+  "nav.plans": { uz: "Obuna", ru: "Подписка", en: "Plans" },
+  "plans.title": { uz: "Obuna rejalari", ru: "Тарифные планы", en: "Subscription Plans" },
+  "plans.subtitle": { uz: "O'zingizga mos rejani tanlang", ru: "Выберите подходящий план", en: "Choose your plan" },
+  "plans.free": { uz: "Bepul", ru: "Бесплатно", en: "Free" },
+  "plans.subscribe": { uz: "Obuna bo'lish", ru: "Подписаться", en: "Subscribe" },
+  "plans.active": { uz: "Aktiv", ru: "Активен", en: "Active" },
+  "plans.current": { uz: "Joriy reja", ru: "Текущий план", en: "Current plan" },
+  "plans.until": { uz: "Tugaydi", ru: "До", en: "Until" },
+  "plans.mockNote": { uz: "* Test rejimida — haqiqiy to'lov amalga oshmaydi", ru: "* Тестовый режим — реальная оплата не производится", en: "* Mock mode — no real payment is processed" },
+
+  // Chat
+  "nav.messages": { uz: "Xabarlar", ru: "Сообщения", en: "Messages" },
+  "chat.empty": { uz: "Suhbatlar yo'q", ru: "Нет чатов", en: "No conversations" },
+  "chat.selectThread": { uz: "Suhbatni tanlang", ru: "Выберите чат", en: "Select a conversation" },
+  "chat.placeholder": { uz: "Xabar yozing...", ru: "Сообщение...", en: "Type a message..." },
+
+  // Barber detail
+  "barber.portfolio": { uz: "Portfolio", ru: "Портфолио", en: "Portfolio" },
+  "barber.schedule": { uz: "Ish vaqti", ru: "Расписание", en: "Schedule" },
+  "barber.upload": { uz: "Rasm yuklash", ru: "Загрузить", en: "Upload" },
+  "barber.working": { uz: "Ishlaydi", ru: "Работает", en: "Working" },
+  "barber.off": { uz: "Dam olish", ru: "Выходной", en: "Off" },
+  "barber.chat": { uz: "Yozish", ru: "Написать", en: "Message" },
+
+  // Reviews
+  "reviews.title": { uz: "Sharhlar", ru: "Отзывы", en: "Reviews" },
+  "reviews.count": { uz: "ta sharh", ru: "отзывов", en: "reviews" },
+  "reviews.leave": { uz: "Sharh qoldiring", ru: "Оставьте отзыв", en: "Leave a review" },
+  "reviews.comment": { uz: "Sizning fikringiz...", ru: "Ваш отзыв...", en: "Your comment..." },
+  "reviews.none": { uz: "Hali sharhlar yo'q", ru: "Пока нет отзывов", en: "No reviews yet" },
 };
 
 export const langLabels: Record<Language, string> = { uz: "UZ", ru: "RU", en: "EN" };
