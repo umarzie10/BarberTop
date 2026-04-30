@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -8,6 +9,7 @@ import { Plus, Download, Upload, Trash2, Star } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Barbers() {
+  const navigate = useNavigate();
   const { t } = useLanguage();
   const { isAdmin } = useUserRole();
   const [items, setItems] = useState<any[]>([]);
