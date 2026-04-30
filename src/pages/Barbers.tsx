@@ -78,19 +78,21 @@ export default function Barbers() {
       {!items.length ? <Empty text={t("common.empty")} /> : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {items.map((b) => (
-            <Card key={b.id} className="relative">
-              {isAdmin && <button onClick={() => del(b.id)} className="absolute top-3 right-3 p-1 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="w-3.5 h-3.5" /></button>}
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
-                  {b.full_name.split(" ").map((n: string) => n[0]).slice(0, 2).join("")}
+            <Card key={b.id} className="relative cursor-pointer hover:border-primary forge-transition" >
+              {isAdmin && <button onClick={(e) => { e.stopPropagation(); del(b.id); }} className="absolute top-3 right-3 p-1 hover:bg-destructive/10 text-destructive rounded z-10"><Trash2 className="w-3.5 h-3.5" /></button>}
+              <div onClick={() => navigate(`/barbers/${b.id}`)}>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                    {b.full_name.split(" ").map((n: string) => n[0]).slice(0, 2).join("")}
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">{b.full_name}</h3>
+                    <p className="text-xs text-muted-foreground">{b.specialty}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-foreground">{b.full_name}</h3>
-                  <p className="text-xs text-muted-foreground">{b.specialty}</p>
-                </div>
+                {b.bio && <p className="text-xs text-muted-foreground mt-3 line-clamp-2">{b.bio}</p>}
+                <div className="flex items-center gap-1 mt-3 text-xs"><Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" /><span className="text-foreground font-medium">{Number(b.rating).toFixed(1)}</span></div>
               </div>
-              {b.bio && <p className="text-xs text-muted-foreground mt-3">{b.bio}</p>}
-              <div className="flex items-center gap-1 mt-3 text-xs"><Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" /><span className="text-foreground font-medium">{Number(b.rating).toFixed(1)}</span></div>
             </Card>
           ))}
         </div>
