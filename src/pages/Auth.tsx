@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useLanguage, langLabels, type Language } from "@/contexts/LanguageContext";
-import { Globe, Sparkles, Loader2 } from "lucide-react";
+import { Globe, Sparkles, Loader2, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
 const DEMO = [
@@ -13,7 +13,8 @@ const DEMO = [
 ];
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [params] = useSearchParams();
+  const [isLogin, setIsLogin] = useState(params.get("mode") !== "register");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -23,6 +24,10 @@ const Auth = () => {
   const [seeding, setSeeding] = useState(false);
   const navigate = useNavigate();
   const { t, lang, setLang } = useLanguage();
+
+  useEffect(() => {
+    if (params.get("mode") === "register") setIsLogin(false);
+  }, [params]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,7 +81,10 @@ const Auth = () => {
   const langs: Language[] = ["uz", "ru", "en"];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative">
+      <Link to="/auth" className="absolute top-4 left-4 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition">
+        <ArrowLeft className="w-3.5 h-3.5" /> Bosh sahifa
+      </Link>
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
         <div className="flex items-center justify-center gap-1 mb-6">
           <Globe className="w-3.5 h-3.5 text-muted-foreground mr-1" />
