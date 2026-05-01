@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AppLayout } from "@/components/layout/AppLayout";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 import Appointments from "./pages/Appointments";
 import Services from "./pages/Services";
@@ -49,7 +50,8 @@ const App = () => (
           <BrowserRouter>
             <AuthProvider>
               <Routes>
-                <Route path="/auth" element={<AuthRoute><Auth /></AuthRoute>} />
+                <Route path="/auth" element={<AuthRoute><Landing /></AuthRoute>} />
+                <Route path="/auth/login" element={<AuthRoute><Auth /></AuthRoute>} />
                 <Route path="/*" element={
                   <ProtectedRoute>
                     <AppLayout>
