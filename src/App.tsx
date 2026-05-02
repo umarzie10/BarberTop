@@ -75,6 +75,13 @@ const App = () => (
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/plans" element={<Plans />} />
                         <Route path="/messages" element={<Messages />} />
+                        <Route path="/barber/profile" element={<BarberProfileEdit />} />
+                        <Route path="/barber/services" element={<BarberServicesPage />} />
+                        <Route path="/barber/portfolio" element={<BarberPortfolioPage />} />
+                        <Route path="/barber/bookings" element={<BarberBookingsPage />} />
+                        <Route path="/barber/stats" element={<BarberStatsPage />} />
+                        <Route path="/barber/reviews" element={<BarberReviewsPage />} />
+                        <Route path="/barber/clients" element={<BarberClientsPage />} />
                         <Route path="*" element={<NotFound />} />
                       </Routes>
                       <AIChatPanel />
