@@ -6,6 +6,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import {
   LayoutDashboard, Calendar, Scissors, Users, DollarSign, LogOut,
   Sun, Moon, User, Globe, Sparkles, BookOpen, MessageCircle, Crown,
+  Image as ImageIcon, BarChart3, Star,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -30,10 +31,15 @@ export const AppSidebar = () => {
   ];
   const barberNav = [
     { icon: LayoutDashboard, label: t("nav.dashboard"), path: "/" },
-    { icon: Calendar, label: t("nav.appointments"), path: "/appointments" },
+    { icon: Calendar, label: "Bronlar", path: "/barber/bookings" },
+    { icon: Scissors, label: "Xizmatlarim", path: "/barber/services" },
+    { icon: ImageIcon, label: "Portfolio", path: "/barber/portfolio" },
+    { icon: Users, label: "Mijozlar", path: "/barber/clients" },
+    { icon: BarChart3, label: "Statistika", path: "/barber/stats" },
+    { icon: Star, label: "Sharhlar", path: "/barber/reviews" },
     { icon: MessageCircle, label: t("nav.messages"), path: "/messages" },
     { icon: Crown, label: t("nav.plans"), path: "/plans" },
-    { icon: User, label: t("nav.profile"), path: "/profile" },
+    { icon: User, label: "Profilim", path: "/barber/profile" },
   ];
   const clientNav = [
     { icon: LayoutDashboard, label: t("nav.dashboard"), path: "/" },

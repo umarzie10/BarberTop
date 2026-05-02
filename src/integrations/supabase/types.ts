@@ -157,27 +157,68 @@ export type Database = {
           },
         ]
       }
-      barber_portfolio: {
+      barber_blacklist: {
         Row: {
           barber_id: string
+          client_id: string
+          created_at: string
+          id: string
+          reason: string | null
+        }
+        Insert: {
+          barber_id: string
+          client_id: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+        }
+        Update: {
+          barber_id?: string
+          client_id?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "barber_blacklist_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      barber_portfolio: {
+        Row: {
+          after_url: string | null
+          barber_id: string
+          before_url: string | null
           caption: string | null
           created_at: string
           id: string
           image_url: string
+          media_type: string
         }
         Insert: {
+          after_url?: string | null
           barber_id: string
+          before_url?: string | null
           caption?: string | null
           created_at?: string
           id?: string
           image_url: string
+          media_type?: string
         }
         Update: {
+          after_url?: string | null
           barber_id?: string
+          before_url?: string | null
           caption?: string | null
           created_at?: string
           id?: string
           image_url?: string
+          media_type?: string
         }
         Relationships: [
           {
@@ -230,48 +271,131 @@ export type Database = {
           },
         ]
       }
+      barber_services: {
+        Row: {
+          active: boolean
+          barber_id: string
+          created_at: string
+          description: string | null
+          discount_percent: number
+          duration_minutes: number
+          id: string
+          name: string
+          price: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          barber_id: string
+          created_at?: string
+          description?: string | null
+          discount_percent?: number
+          duration_minutes?: number
+          id?: string
+          name: string
+          price?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          barber_id?: string
+          created_at?: string
+          description?: string | null
+          discount_percent?: number
+          duration_minutes?: number
+          id?: string
+          name?: string
+          price?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "barber_services_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       barbers: {
         Row: {
           active: boolean
           bio: string | null
+          busy_status: boolean
+          cover_url: string | null
           created_at: string
+          experience_years: number | null
           full_name: string
+          home_service: boolean
           id: string
+          instagram: string | null
+          map_link: string | null
           photo_url: string | null
           rating: number | null
+          salon_address: string | null
+          salon_name: string | null
           specialty: string | null
+          telegram_username: string | null
+          tiktok: string | null
           updated_at: string
           user_id: string | null
+          username: string | null
           work_end: string | null
           work_start: string | null
+          youtube: string | null
         }
         Insert: {
           active?: boolean
           bio?: string | null
+          busy_status?: boolean
+          cover_url?: string | null
           created_at?: string
+          experience_years?: number | null
           full_name: string
+          home_service?: boolean
           id?: string
+          instagram?: string | null
+          map_link?: string | null
           photo_url?: string | null
           rating?: number | null
+          salon_address?: string | null
+          salon_name?: string | null
           specialty?: string | null
+          telegram_username?: string | null
+          tiktok?: string | null
           updated_at?: string
           user_id?: string | null
+          username?: string | null
           work_end?: string | null
           work_start?: string | null
+          youtube?: string | null
         }
         Update: {
           active?: boolean
           bio?: string | null
+          busy_status?: boolean
+          cover_url?: string | null
           created_at?: string
+          experience_years?: number | null
           full_name?: string
+          home_service?: boolean
           id?: string
+          instagram?: string | null
+          map_link?: string | null
           photo_url?: string | null
           rating?: number | null
+          salon_address?: string | null
+          salon_name?: string | null
           specialty?: string | null
+          telegram_username?: string | null
+          tiktok?: string | null
           updated_at?: string
           user_id?: string | null
+          username?: string | null
           work_end?: string | null
           work_start?: string | null
+          youtube?: string | null
         }
         Relationships: []
       }
@@ -441,6 +565,8 @@ export type Database = {
           created_at: string
           id: string
           rating: number
+          replied_at: string | null
+          reply: string | null
         }
         Insert: {
           appointment_id?: string | null
@@ -450,6 +576,8 @@ export type Database = {
           created_at?: string
           id?: string
           rating: number
+          replied_at?: string | null
+          reply?: string | null
         }
         Update: {
           appointment_id?: string | null
@@ -459,6 +587,8 @@ export type Database = {
           created_at?: string
           id?: string
           rating?: number
+          replied_at?: string | null
+          reply?: string | null
         }
         Relationships: [
           {
@@ -619,6 +749,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_active_barber_plans: {
+        Args: never
+        Returns: {
+          code: string
+          user_id: string
+        }[]
+      }
       get_active_plan: { Args: { _user_id: string }; Returns: string }
       get_user_role: {
         Args: { _user_id: string }
