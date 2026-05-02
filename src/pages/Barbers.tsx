@@ -5,7 +5,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PageHeader, Card, Empty } from "@/components/shared/Page";
 import { toCSV, downloadCSV, pickCSVFile } from "@/lib/csv";
-import { Plus, Download, Upload, Trash2, Star } from "lucide-react";
+import { Plus, Download, Upload, Trash2, Star, Crown } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Barbers() {
@@ -13,12 +13,25 @@ export default function Barbers() {
   const { t } = useLanguage();
   const { isAdmin } = useUserRole();
   const [items, setItems] = useState<any[]>([]);
+  const [plans, setPlans] = useState<Record<string, string>>({});
   const [show, setShow] = useState(false);
   const [form, setForm] = useState({ full_name: "", specialty: "", bio: "" });
 
   const load = async () => {
-    const { data } = await supabase.from("barbers").select("*").order("created_at", { ascending: false });
+    const { data } = await supabase.from("barbers").select("*").order("rating", { ascending: false });
     setItems(data || []);
+    const userIds = (data || []).map((b: any) => b.user_id).filter(Boolean);
+    if (userIds.length) {
+      const { data: subs } = await supabase.from("user_subscriptions")
+        .select("user_id, status, expires_at, subscription_plans(code, audience)")
+        .in("user_id", userIds).eq("status", "active");
+      const map: Record<string, string> = {};
+      (subs || []).forEach((s: any) => {
+        if (s.subscription_plans?.audience !== "barber") return;
+        if (new Date(s.expires_at) > new Date()) map[s.user_id] = s.subscription_plans.code;
+      });
+      setPlans(map);
+    }
   };
   useEffect(() => { load(); }, []);
 
