@@ -6,6 +6,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import {
   LayoutDashboard, Calendar, Scissors, Users, DollarSign, LogOut,
   Sun, Moon, User, Globe, Sparkles, BookOpen, MessageCircle, Crown,
+  Image as ImageIcon, BarChart3, Star,
 } from "lucide-react";
 import { useState } from "react";
 
