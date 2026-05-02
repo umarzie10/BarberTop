@@ -749,6 +749,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_active_barber_plans: {
+        Args: never
+        Returns: {
+          code: string
+          user_id: string
+        }[]
+      }
       get_active_plan: { Args: { _user_id: string }; Returns: string }
       get_user_role: {
         Args: { _user_id: string }
