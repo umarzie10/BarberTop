@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PageHeader, Card, Empty } from "@/components/shared/Page";
-import { Star, Calendar, MessageCircle, Upload, Trash2 } from "lucide-react";
+import { Star, Calendar, MessageCircle, Upload, Trash2, MapPin, Instagram, Youtube, Send, Crown } from "lucide-react";
 import { toast } from "sonner";
 
 const DAYS = ["Yak", "Du", "Se", "Cho", "Pa", "Ju", "Sha"];
