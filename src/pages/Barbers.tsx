@@ -90,24 +90,41 @@ export default function Barbers() {
 
       {!items.length ? <Empty text={t("common.empty")} /> : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {items.map((b) => (
-            <Card key={b.id} className="relative cursor-pointer hover:border-primary forge-transition" >
+          {[...items].sort((a, b) => {
+            const rank = (p: string) => p === "vip" ? 2 : p === "pro" ? 1 : 0;
+            return rank(plans[b.user_id] || "") - rank(plans[a.user_id] || "") || Number(b.rating) - Number(a.rating);
+          }).map((b) => {
+            const plan = plans[b.user_id];
+            return (
+            <Card key={b.id} className={`relative cursor-pointer hover:border-primary forge-transition ${plan === "vip" ? "ring-2 ring-yellow-400/50" : ""}`} >
+              {plan && (
+                <span className={`absolute top-3 left-3 z-10 text-[10px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1 ${plan === "vip" ? "bg-yellow-400 text-black" : "bg-primary text-primary-foreground"}`}>
+                  <Crown className="w-3 h-3" /> {plan.toUpperCase()}
+                </span>
+              )}
               {isAdmin && <button onClick={(e) => { e.stopPropagation(); del(b.id); }} className="absolute top-3 right-3 p-1 hover:bg-destructive/10 text-destructive rounded z-10"><Trash2 className="w-3.5 h-3.5" /></button>}
               <div onClick={() => navigate(`/barbers/${b.id}`)}>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
-                    {b.full_name.split(" ").map((n: string) => n[0]).slice(0, 2).join("")}
-                  </div>
+                <div className="flex items-center gap-3 mt-4">
+                  {b.photo_url ? <img src={b.photo_url} className="w-12 h-12 rounded-full object-cover" /> : (
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                      {b.full_name.split(" ").map((n: string) => n[0]).slice(0, 2).join("")}
+                    </div>
+                  )}
                   <div>
                     <h3 className="font-semibold text-foreground">{b.full_name}</h3>
                     <p className="text-xs text-muted-foreground">{b.specialty}</p>
                   </div>
                 </div>
                 {b.bio && <p className="text-xs text-muted-foreground mt-3 line-clamp-2">{b.bio}</p>}
-                <div className="flex items-center gap-1 mt-3 text-xs"><Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" /><span className="text-foreground font-medium">{Number(b.rating).toFixed(1)}</span></div>
+                <div className="flex items-center gap-2 mt-3 text-xs flex-wrap">
+                  <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+                  <span className="text-foreground font-medium">{Number(b.rating).toFixed(1)}</span>
+                  {b.busy_status && <span className="text-[10px] px-1.5 py-0.5 bg-destructive/10 text-destructive rounded">Bandman</span>}
+                  {b.home_service && <span className="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded">Uyga boradi</span>}
+                </div>
               </div>
             </Card>
-          ))}
+          );})}
         </div>
       )}
     </div>
