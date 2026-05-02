@@ -22,6 +22,13 @@ import Profile from "./pages/Profile";
 import Plans from "./pages/Plans";
 import Messages from "./pages/Messages";
 import BarberDetail from "./pages/BarberDetail";
+import BarberProfileEdit from "./pages/barber/BarberProfileEdit";
+import BarberServicesPage from "./pages/barber/BarberServicesPage";
+import BarberPortfolioPage from "./pages/barber/BarberPortfolioPage";
+import BarberBookingsPage from "./pages/barber/BarberBookingsPage";
+import BarberStatsPage from "./pages/barber/BarberStatsPage";
+import BarberReviewsPage from "./pages/barber/BarberReviewsPage";
+import BarberClientsPage from "./pages/barber/BarberClientsPage";
 import { AIChatPanel } from "./components/ai/AIChatPanel";
 
 const queryClient = new QueryClient();
