@@ -111,14 +111,43 @@ export default function BarberDetail() {
         </>
       } />
 
-      <Card>
-        <div className="flex items-center gap-4">
-          <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl font-bold">
-            {barber.full_name.split(" ").map((n: string) => n[0]).slice(0, 2).join("")}
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2"><Star className="w-4 h-4 fill-yellow-400 text-yellow-400" /><span className="font-semibold">{Number(barber.rating).toFixed(1)}</span><span className="text-xs text-muted-foreground">({reviews.length} {t("reviews.count")})</span></div>
-            {barber.bio && <p className="text-sm text-muted-foreground mt-2">{barber.bio}</p>}
+      <Card className="overflow-hidden p-0">
+        {barber.cover_url && <div className="h-40 bg-cover bg-center" style={{ backgroundImage: `url(${barber.cover_url})` }} />}
+        <div className="p-5">
+          <div className="flex items-start gap-4 flex-wrap">
+            {barber.photo_url ? (
+              <img src={barber.photo_url} alt="" className="w-20 h-20 rounded-full object-cover border-4 border-card -mt-12" />
+            ) : (
+              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl font-bold">
+                {barber.full_name.split(" ").map((n: string) => n[0]).slice(0, 2).join("")}
+              </div>
+            )}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                <span className="font-semibold">{Number(barber.rating).toFixed(1)}</span>
+                <span className="text-xs text-muted-foreground">({reviews.length} {t("reviews.count")})</span>
+                {barber.experience_years > 0 && <span className="text-xs px-2 py-0.5 bg-primary/10 text-primary rounded">{barber.experience_years} yil tajriba</span>}
+                {barber.busy_status && <span className="text-xs px-2 py-0.5 bg-destructive/10 text-destructive rounded">Bandman</span>}
+              </div>
+              {barber.bio && <p className="text-sm text-muted-foreground mt-2">{barber.bio}</p>}
+              {(barber.salon_name || barber.salon_address) && (
+                <div className="flex items-start gap-1.5 text-sm text-muted-foreground mt-2">
+                  <MapPin className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                  <div>
+                    {barber.salon_name && <p className="font-medium text-foreground">{barber.salon_name}</p>}
+                    {barber.salon_address && <p className="text-xs">{barber.salon_address}</p>}
+                    {barber.map_link && <a href={barber.map_link} target="_blank" rel="noopener" className="text-xs text-primary hover:underline">Xaritada ochish</a>}
+                  </div>
+                </div>
+              )}
+              <div className="flex gap-2 mt-3 flex-wrap">
+                {barber.instagram && <a href={`https://instagram.com/${barber.instagram.replace("@", "")}`} target="_blank" rel="noopener" className="p-1.5 bg-secondary rounded hover:opacity-80"><Instagram className="w-3.5 h-3.5" /></a>}
+                {barber.tiktok && <a href={`https://tiktok.com/@${barber.tiktok.replace("@", "")}`} target="_blank" rel="noopener" className="p-1.5 bg-secondary rounded hover:opacity-80 text-xs">TT</a>}
+                {barber.youtube && <a href={barber.youtube.startsWith("http") ? barber.youtube : `https://youtube.com/${barber.youtube}`} target="_blank" rel="noopener" className="p-1.5 bg-secondary rounded hover:opacity-80"><Youtube className="w-3.5 h-3.5" /></a>}
+                {barber.telegram_username && <a href={`https://t.me/${barber.telegram_username.replace("@", "")}`} target="_blank" rel="noopener" className="p-1.5 bg-secondary rounded hover:opacity-80"><Send className="w-3.5 h-3.5" /></a>}
+              </div>
+            </div>
           </div>
         </div>
       </Card>
