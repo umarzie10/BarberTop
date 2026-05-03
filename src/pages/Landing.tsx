@@ -310,6 +310,7 @@ const SearchBar = () => {
           />
         </div>
         <button
+          onClick={() => toast.error("Avval tizimga kiring")}
           className="px-8 py-3 rounded-xl text-sm font-semibold text-black transition hover:scale-[1.02]"
           style={{ background: `linear-gradient(135deg, ${GOLD}, ${GOLD_SOFT})` }}
         >
