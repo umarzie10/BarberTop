@@ -651,11 +651,13 @@ export type Database = {
           code: string
           created_at: string
           duration_days: number
+          duration_label: string | null
           features: Json
           id: string
           name: string
           price: number
           sort_order: number
+          tier: string
         }
         Insert: {
           active?: boolean
@@ -664,11 +666,13 @@ export type Database = {
           code: string
           created_at?: string
           duration_days?: number
+          duration_label?: string | null
           features?: Json
           id?: string
           name: string
           price?: number
           sort_order?: number
+          tier?: string
         }
         Update: {
           active?: boolean
@@ -677,11 +681,13 @@ export type Database = {
           code?: string
           created_at?: string
           duration_days?: number
+          duration_label?: string | null
           features?: Json
           id?: string
           name?: string
           price?: number
           sort_order?: number
+          tier?: string
         }
         Relationships: []
       }
@@ -753,10 +759,12 @@ export type Database = {
         Args: never
         Returns: {
           code: string
+          tier: string
           user_id: string
         }[]
       }
       get_active_plan: { Args: { _user_id: string }; Returns: string }
+      get_my_tier: { Args: { _audience?: string }; Returns: string }
       get_user_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]

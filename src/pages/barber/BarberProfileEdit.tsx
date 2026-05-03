@@ -72,28 +72,15 @@ export default function BarberProfileEdit() {
 
       <form onSubmit={save} className="space-y-4">
         <Card>
-          <h3 className="text-sm font-semibold mb-4">Rasmlar</h3>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <p className="text-xs text-muted-foreground mb-2">Cover (banner)</p>
-              <div className="aspect-[3/1] rounded-md bg-muted overflow-hidden mb-2 relative">
-                {form.cover_url && <img src={form.cover_url} alt="" className="w-full h-full object-cover" />}
-              </div>
-              <label className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-secondary rounded-md cursor-pointer">
-                <Upload className="w-3.5 h-3.5" /> {uploading === "cover" ? "..." : "Cover yuklash"}
-                <input type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], "cover")} />
-              </label>
+          <h3 className="text-sm font-semibold mb-4">Profil rasmi</h3>
+          <div className="flex items-center gap-4">
+            <div className="w-32 h-32 rounded-full bg-muted overflow-hidden">
+              {form.photo_url && <img src={form.photo_url} alt="" className="w-full h-full object-cover" />}
             </div>
-            <div className="w-full sm:w-40">
-              <p className="text-xs text-muted-foreground mb-2">Profil rasmi</p>
-              <div className="w-32 h-32 rounded-full bg-muted overflow-hidden mb-2">
-                {form.photo_url && <img src={form.photo_url} alt="" className="w-full h-full object-cover" />}
-              </div>
-              <label className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-secondary rounded-md cursor-pointer">
-                <Upload className="w-3.5 h-3.5" /> {uploading === "photo" ? "..." : "Rasm"}
-                <input type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], "photo")} />
-              </label>
-            </div>
+            <label className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-secondary rounded-md cursor-pointer">
+              <Upload className="w-3.5 h-3.5" /> {uploading === "photo" ? "..." : "Rasm yuklash"}
+              <input type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], "photo")} />
+            </label>
           </div>
         </Card>
 

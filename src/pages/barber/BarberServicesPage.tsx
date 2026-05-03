@@ -27,7 +27,7 @@ export default function BarberServicesPage() {
 
   const create = async () => {
     if (!barberId || !draft.name.trim()) return toast.error("Nom kiriting");
-    const { error } = await supabase.from("barber_services").insert({ ...draft, barber_id: barberId });
+    const { error } = await supabase.from("barber_services").insert({ name: draft.name, price: draft.price, duration_minutes: draft.duration_minutes, description: draft.description, barber_id: barberId });
     if (error) return toast.error(error.message);
     setShowNew(false); setDraft({ name: "", price: 0, duration_minutes: 30, discount_percent: 0, description: "" });
     load(barberId); toast.success("Qo'shildi");
@@ -60,12 +60,23 @@ export default function BarberServicesPage() {
       {showNew && (
         <Card className="mb-4">
           <h4 className="text-sm font-semibold mb-3">Yangi xizmat</h4>
-          <div className="grid sm:grid-cols-4 gap-2">
-            <input className={inputCls} placeholder="Nomi" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
-            <input type="number" className={inputCls} placeholder="Narx (so'm)" value={draft.price} onChange={(e) => setDraft({ ...draft, price: Number(e.target.value) })} />
-            <input type="number" className={inputCls} placeholder="Daqiqa" value={draft.duration_minutes} onChange={(e) => setDraft({ ...draft, duration_minutes: Number(e.target.value) })} />
-            <input type="number" min={0} max={100} className={inputCls} placeholder="Chegirma %" value={draft.discount_percent} onChange={(e) => setDraft({ ...draft, discount_percent: Number(e.target.value) })} />
-            <input className={`${inputCls} sm:col-span-4`} placeholder="Tavsif (ixtiyoriy)" value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} />
+          <div className="grid sm:grid-cols-3 gap-3">
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Xizmatning nomi</label>
+              <input className={`${inputCls} w-full`} placeholder="Masalan: Fade" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Narxi (so'm)</label>
+              <input type="number" className={`${inputCls} w-full`} placeholder="80000" value={draft.price} onChange={(e) => setDraft({ ...draft, price: Number(e.target.value) })} />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Davomiyligi (daqiqa)</label>
+              <input type="number" className={`${inputCls} w-full`} placeholder="30" value={draft.duration_minutes} onChange={(e) => setDraft({ ...draft, duration_minutes: Number(e.target.value) })} />
+            </div>
+            <div className="sm:col-span-3">
+              <label className="text-xs text-muted-foreground mb-1 block">Tavsif (ixtiyoriy)</label>
+              <input className={`${inputCls} w-full`} placeholder="Qisqacha tavsif" value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} />
+            </div>
           </div>
           <div className="flex gap-2 mt-3">
             <button onClick={create} className="px-3 py-1.5 text-xs bg-primary text-primary-foreground rounded">Saqlash</button>

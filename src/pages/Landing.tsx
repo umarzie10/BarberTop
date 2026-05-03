@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import {
   Scissors, Search, Star, MapPin, Crown, Sparkles, Brain, TrendingUp,
   Zap, Shield, Users, Calendar, ArrowRight, Check, Quote, Smartphone,
@@ -309,6 +310,7 @@ const SearchBar = () => {
           />
         </div>
         <button
+          onClick={() => toast.error("Avval tizimga kiring")}
           className="px-8 py-3 rounded-xl text-sm font-semibold text-black transition hover:scale-[1.02]"
           style={{ background: `linear-gradient(135deg, ${GOLD}, ${GOLD_SOFT})` }}
         >
@@ -384,6 +386,7 @@ const TopBarbers = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-white/70">dan <span className="text-white font-semibold">{b.price}</span></span>
                   <button
+                    onClick={(e) => { e.stopPropagation(); toast.error("Avval tizimga kiring"); }}
                     className="px-3 py-1.5 text-xs font-medium rounded-full text-black transition group-hover:scale-105"
                     style={{ background: GOLD }}
                   >

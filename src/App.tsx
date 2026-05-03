@@ -29,6 +29,7 @@ import BarberBookingsPage from "./pages/barber/BarberBookingsPage";
 import BarberStatsPage from "./pages/barber/BarberStatsPage";
 import BarberReviewsPage from "./pages/barber/BarberReviewsPage";
 import BarberClientsPage from "./pages/barber/BarberClientsPage";
+import BarberSchedulePage from "./pages/barber/BarberSchedulePage";
 import { AIChatPanel } from "./components/ai/AIChatPanel";
 
 const queryClient = new QueryClient();
@@ -82,6 +83,7 @@ const App = () => (
                         <Route path="/barber/stats" element={<BarberStatsPage />} />
                         <Route path="/barber/reviews" element={<BarberReviewsPage />} />
                         <Route path="/barber/clients" element={<BarberClientsPage />} />
+                        <Route path="/barber/schedule" element={<BarberSchedulePage />} />
                         <Route path="*" element={<NotFound />} />
                       </Routes>
                       <AIChatPanel />

@@ -31,15 +31,16 @@ export const AppSidebar = () => {
   ];
   const barberNav = [
     { icon: LayoutDashboard, label: t("nav.dashboard"), path: "/" },
-    { icon: Calendar, label: "Bronlar", path: "/barber/bookings" },
-    { icon: Scissors, label: "Xizmatlarim", path: "/barber/services" },
-    { icon: ImageIcon, label: "Portfolio", path: "/barber/portfolio" },
-    { icon: Users, label: "Mijozlar", path: "/barber/clients" },
-    { icon: BarChart3, label: "Statistika", path: "/barber/stats" },
-    { icon: Star, label: "Sharhlar", path: "/barber/reviews" },
+    { icon: Calendar, label: t("nav.bookings"), path: "/barber/bookings" },
+    { icon: Scissors, label: t("nav.myServices"), path: "/barber/services" },
+    { icon: ImageIcon, label: t("nav.portfolio"), path: "/barber/portfolio" },
+    { icon: Calendar, label: t("nav.schedule"), path: "/barber/schedule" },
+    { icon: Users, label: t("nav.clients"), path: "/barber/clients" },
+    { icon: BarChart3, label: t("nav.stats"), path: "/barber/stats" },
+    { icon: Star, label: t("nav.reviews"), path: "/barber/reviews" },
     { icon: MessageCircle, label: t("nav.messages"), path: "/messages" },
     { icon: Crown, label: t("nav.plans"), path: "/plans" },
-    { icon: User, label: "Profilim", path: "/barber/profile" },
+    { icon: User, label: t("nav.myProfile"), path: "/barber/profile" },
   ];
   const clientNav = [
     { icon: LayoutDashboard, label: t("nav.dashboard"), path: "/" },
