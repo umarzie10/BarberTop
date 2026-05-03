@@ -5,9 +5,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PageHeader, Card, Empty } from "@/components/shared/Page";
 import { toast } from "sonner";
-import { Check, Crown, Star, Zap } from "lucide-react";
-
-const ICONS: Record<string, any> = { PREMIUM: Crown, PRO: Star, VIP: Zap };
+import { Check, Crown, Star } from "lucide-react";
 
 export default function Plans() {
   const { user } = useAuth();
@@ -40,8 +38,14 @@ export default function Plans() {
     });
     setLoading(null);
     if (error) return toast.error(error.message);
-    toast.success(`${p.name} rejasi faollashtirildi! (mock to'lov)`);
-    load();
+    toast.success(`${p.name} faollashtirildi! (mock)`); load();
+  };
+
+  const tiers: ("free" | "pro" | "vip")[] = ["free", "pro", "vip"];
+  const tierMeta: Record<string, { icon: any; label: string; color: string }> = {
+    free: { icon: Check, label: t("plans.tier.free"), color: "border-border" },
+    pro: { icon: Star, label: t("plans.tier.pro"), color: "border-primary" },
+    vip: { icon: Crown, label: t("plans.tier.vip"), color: "border-yellow-400" },
   };
 
   return (
@@ -62,32 +66,49 @@ export default function Plans() {
         </Card>
       )}
       {!plans.length ? <Empty text={t("common.empty")} /> : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {plans.map((p) => {
-            const Icon = ICONS[p.badge] || Check;
-            const isActive = active?.plan_id === p.id;
-            const featured = !!p.badge && p.badge !== "PREMIUM";
+        <div className="space-y-8">
+          {tiers.map((tier) => {
+            const tierPlans = plans.filter((p) => p.tier === tier);
+            if (!tierPlans.length) return null;
+            const meta = tierMeta[tier];
+            const Icon = meta.icon;
+            const features = tierPlans[0].features as string[];
             return (
-              <Card key={p.id} className={`flex flex-col ${featured ? "border-primary shadow-lg" : ""}`}>
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-foreground">{p.name}</h3>
-                  {p.badge && <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary">{p.badge}</span>}
+              <Card key={tier} className={`border-2 ${meta.color}`}>
+                <div className="flex items-center gap-2 mb-4">
+                  <Icon className="w-5 h-5 text-primary" />
+                  <h2 className="text-xl font-bold text-foreground">{meta.label}</h2>
                 </div>
-                <div className="my-4">
-                  <span className="text-3xl font-bold text-foreground">{p.price > 0 ? `${Number(p.price).toLocaleString()}` : t("plans.free")}</span>
-                  {p.price > 0 && <span className="text-sm text-muted-foreground"> so'm / {p.duration_days}d</span>}
-                </div>
-                <ul className="space-y-2 flex-1 mb-4">
-                  {(p.features as string[]).map((f, i) => (
+
+                <ul className="grid sm:grid-cols-2 gap-x-4 gap-y-1.5 mb-5">
+                  {features.map((f, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <Icon className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" /> <span>{f}</span>
+                      <Check className="w-3.5 h-3.5 mt-0.5 text-primary flex-shrink-0" /> <span>{f}</span>
                     </li>
                   ))}
                 </ul>
-                <button disabled={isActive || loading === p.id} onClick={() => subscribe(p)}
-                  className={`w-full py-2.5 text-sm font-medium rounded-md forge-transition ${isActive ? "bg-muted text-muted-foreground" : "bg-primary text-primary-foreground hover:opacity-90"} disabled:opacity-60`}>
-                  {isActive ? t("plans.active") : loading === p.id ? "..." : t("plans.subscribe")}
-                </button>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {tierPlans.map((p) => {
+                    const isActive = active?.plan_id === p.id;
+                    return (
+                      <button
+                        key={p.id}
+                        disabled={isActive || loading === p.id || tier === "free"}
+                        onClick={() => subscribe(p)}
+                        className={`p-3 rounded-md border text-left forge-transition ${isActive ? "border-primary bg-primary/5" : "border-border hover:border-primary"}`}
+                      >
+                        <p className="text-xs text-muted-foreground">{p.duration_label}</p>
+                        <p className="text-sm font-bold text-foreground mt-0.5">
+                          {p.price > 0 ? `${Number(p.price).toLocaleString()} so'm` : t("plans.free")}
+                        </p>
+                        <p className="text-[10px] text-primary mt-1">
+                          {isActive ? t("plans.active") : tier === "free" ? "—" : t("plans.subscribe")}
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
               </Card>
             );
           })}
