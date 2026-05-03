@@ -2,3 +2,6 @@ project_id = "jzsuwnonmfmdtiodepzk"
 
 [functions.ai-assistant]
 verify_jwt = false
+
+[functions.create-barber]
+verify_jwt = true
