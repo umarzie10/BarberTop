@@ -124,29 +124,6 @@ const Auth = () => {
           </p>
         </div>
 
-        {/* Demo accounts */}
-        <div className="mt-6 bg-card border border-border rounded-lg p-4">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-xs font-semibold text-foreground">{t("auth.demoTitle")}</p>
-            <button onClick={seedDemo} disabled={seeding}
-              className="text-[11px] px-2 py-1 bg-secondary text-secondary-foreground rounded hover:opacity-90 disabled:opacity-50 flex items-center gap-1">
-              {seeding && <Loader2 className="w-3 h-3 animate-spin" />}
-              {t("auth.seedBtn")}
-            </button>
-          </div>
-          <div className="space-y-1.5">
-            {DEMO.map((d) => (
-              <button key={d.email} onClick={() => fillDemo(d)}
-                className="w-full flex items-center justify-between text-xs px-3 py-2 bg-muted/50 hover:bg-muted rounded-md forge-transition text-left">
-                <div>
-                  <p className="font-medium text-foreground">{d.role}</p>
-                  <p className="text-muted-foreground">{d.email} / {d.password}</p>
-                </div>
-                <span className="text-primary text-[10px]">{t("auth.fillDemo")}</span>
-              </button>
-            ))}
-          </div>
-        </div>
       </motion.div>
     </div>
   );
