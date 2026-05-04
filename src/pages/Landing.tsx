@@ -69,10 +69,10 @@ const Header = () => {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm text-white/70">
-          <a href="#barbers" className="hover:text-white transition">Barberlar</a>
-          <a href="#trends" className="hover:text-white transition">Trendlar</a>
-          <a href="#premium" className="hover:text-white transition">Premium</a>
-          <a href="#join" className="hover:text-white transition">Barber bo'lish</a>
+          <a href="#barbers" className="hover:text-white transition">{useLanguage().t("land.menu.barbers")}</a>
+          <a href="#trends" className="hover:text-white transition">{useLanguage().t("land.menu.trends")}</a>
+          <a href="#premium" className="hover:text-white transition">{useLanguage().t("land.menu.premium")}</a>
+          <a href="#join" className="hover:text-white transition">{useLanguage().t("land.menu.join")}</a>
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
@@ -95,14 +95,14 @@ const Header = () => {
             to="/auth/login"
             className="px-4 py-2 text-sm text-white/80 hover:text-white transition"
           >
-            Kirish
+            {useLanguage().t("auth.login")}
           </Link>
           <Link
             to="/auth/login?mode=register"
             className="px-5 py-2.5 text-sm font-medium rounded-full text-black transition hover:scale-[1.03]"
             style={{ background: `linear-gradient(135deg, ${GOLD}, ${GOLD_SOFT})` }}
           >
-            Boshlash
+            {useLanguage().t("land.cta.start")}
           </Link>
         </div>
 
@@ -120,14 +120,29 @@ const Header = () => {
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden mx-6 mt-3 p-5 rounded-2xl bg-black/90 backdrop-blur-xl border border-white/10 space-y-3"
         >
-          {["Barberlar", "Trendlar", "Premium", "Barber bo'lish"].map((l) => (
-            <a key={l} href="#" className="block text-white/80 text-sm py-1.5">{l}</a>
+          {[
+            { label: useLanguage().t("land.menu.barbers"), href: "#barbers" },
+            { label: useLanguage().t("land.menu.trends"), href: "#trends" },
+            { label: useLanguage().t("land.menu.premium"), href: "#premium" },
+            { label: useLanguage().t("land.menu.join"), href: "#join" },
+          ].map((l) => (
+            <a key={l.href} href={l.href} className="block text-white/80 text-sm py-1.5">{l.label}</a>
           ))}
           <div className="flex gap-2 pt-2 border-t border-white/10">
-            <Link to="/auth/login" className="flex-1 px-4 py-2 text-sm text-center text-white/80 border border-white/15 rounded-full">Kirish</Link>
+            <Link to="/auth/login" className="flex-1 px-4 py-2 text-sm text-center text-white/80 border border-white/15 rounded-full">{useLanguage().t("auth.login")}</Link>
             <Link to="/auth/login?mode=register" className="flex-1 px-4 py-2 text-sm text-center text-black rounded-full font-medium" style={{ background: GOLD }}>
-              Boshlash
+              {useLanguage().t("land.cta.start")}
             </Link>
+          </div>
+          <div className="flex items-center justify-center gap-1 pt-2 border-t border-white/10">
+            <Globe className="w-3.5 h-3.5 text-white/50 mr-1" />
+            {langs.map((l) => (
+              <button key={l} onClick={() => setLang(l)}
+                className={`px-2.5 py-1 text-xs rounded transition ${lang === l ? "text-black" : "text-white/60"}`}
+                style={lang === l ? { background: GOLD } : {}}>
+                {langLabels[l]}
+              </button>
+            ))}
           </div>
         </motion.div>
       )}
