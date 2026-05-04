@@ -105,7 +105,7 @@ export default function BarberDetail() {
               <MessageCircle className="w-3.5 h-3.5" /> {t("barber.chat")}
             </button>
           )}
-          <button onClick={() => navigate("/book")} className="px-3 py-2 text-xs bg-primary text-primary-foreground rounded-md flex items-center gap-1.5">
+          <button onClick={() => navigate(`/book?barber=${barber.id}`)} className="px-3 py-2 text-xs bg-primary text-primary-foreground rounded-md flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5" /> {t("client.bookBtn")}
           </button>
         </>

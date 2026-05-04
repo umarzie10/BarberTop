@@ -6,12 +6,6 @@ import { useLanguage, langLabels, type Language } from "@/contexts/LanguageConte
 import { Globe, Sparkles, Loader2, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
-const DEMO = [
-  { email: "admin@barber.uz", password: "umar.1020", role: "Admin" },
-  { email: "barber@barber.uz", password: "umar.1020", role: "Barber" },
-  { email: "user@barber.uz", password: "umar.1020", role: "Client" },
-];
-
 const Auth = () => {
   const [params] = useSearchParams();
   const [isLogin, setIsLogin] = useState(params.get("mode") !== "register");
@@ -21,7 +15,6 @@ const Auth = () => {
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [seeding, setSeeding] = useState(false);
   const navigate = useNavigate();
   const { t, lang, setLang } = useLanguage();
 
@@ -59,31 +52,12 @@ const Auth = () => {
     }
   };
 
-  const seedDemo = async () => {
-    setSeeding(true);
-    try {
-      const { error } = await supabase.functions.invoke("seed-users");
-      if (error) throw error;
-      toast.success("Demo akkauntlar tayyor!");
-    } catch (e: any) {
-      toast.error(e?.message || "Xato yuz berdi");
-    } finally {
-      setSeeding(false);
-    }
-  };
-
-  const fillDemo = (d: typeof DEMO[0]) => {
-    setIsLogin(true);
-    setEmail(d.email);
-    setPassword(d.password);
-  };
-
   const langs: Language[] = ["uz", "ru", "en"];
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4 relative">
       <Link to="/auth" className="absolute top-4 left-4 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition">
-        <ArrowLeft className="w-3.5 h-3.5" /> Bosh sahifa
+        <ArrowLeft className="w-3.5 h-3.5" /> {t("auth.backHome")}
       </Link>
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
         <div className="flex items-center justify-center gap-1 mb-6">
@@ -150,29 +124,6 @@ const Auth = () => {
           </p>
         </div>
 
-        {/* Demo accounts */}
-        <div className="mt-6 bg-card border border-border rounded-lg p-4">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-xs font-semibold text-foreground">{t("auth.demoTitle")}</p>
-            <button onClick={seedDemo} disabled={seeding}
-              className="text-[11px] px-2 py-1 bg-secondary text-secondary-foreground rounded hover:opacity-90 disabled:opacity-50 flex items-center gap-1">
-              {seeding && <Loader2 className="w-3 h-3 animate-spin" />}
-              {t("auth.seedBtn")}
-            </button>
-          </div>
-          <div className="space-y-1.5">
-            {DEMO.map((d) => (
-              <button key={d.email} onClick={() => fillDemo(d)}
-                className="w-full flex items-center justify-between text-xs px-3 py-2 bg-muted/50 hover:bg-muted rounded-md forge-transition text-left">
-                <div>
-                  <p className="font-medium text-foreground">{d.role}</p>
-                  <p className="text-muted-foreground">{d.email} / {d.password}</p>
-                </div>
-                <span className="text-primary text-[10px]">{t("auth.fillDemo")}</span>
-              </button>
-            ))}
-          </div>
-        </div>
       </motion.div>
     </div>
   );
