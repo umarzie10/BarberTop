@@ -40,7 +40,7 @@ const stagger = {
 const Header = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { lang, setLang } = useLanguage();
+  const { lang, setLang, t } = useLanguage();
   const langs: Language[] = ["uz", "ru", "en"];
 
   useEffect(() => {
