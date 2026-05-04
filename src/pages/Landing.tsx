@@ -153,6 +153,7 @@ const Header = () => {
 // -------------------- Hero --------------------
 const Hero = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   return (
     <section className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
       {/* Background image with overlay */}
@@ -175,22 +176,22 @@ const Hero = () => {
             style={{ borderColor: `${GOLD}40`, background: `${GOLD}15`, color: GOLD_SOFT }}
           >
             <Sparkles className="w-3.5 h-3.5" />
-            #1 O'zbekistondagi premium barber platforma
+            {t("land.tag")}
           </div>
 
           <h1 className="text-5xl md:text-7xl font-bold text-white leading-[1.05] tracking-tight mb-6">
-            O'zingizga mos{" "}
+            {t("land.heroTitle1")}{" "}
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: `linear-gradient(135deg, ${GOLD}, ${GOLD_SOFT}, ${GOLD})` }}
             >
-              TOP barberni
+              {t("land.heroAccent")}
             </span>{" "}
-            toping
+            {t("land.heroTitle2")}
           </h1>
 
           <p className="text-lg text-white/70 max-w-xl mb-8 leading-relaxed">
-            1 daqiqada bron qiling. Yaqin atrofdagi eng yaxshi sartaroshlar, real sharhlar, AI tavsiyalar va premium xizmatlar — barchasi bir joyda.
+            {t("land.heroDesc")}
           </p>
 
           <div className="flex flex-wrap gap-3 mb-10">
@@ -199,14 +200,14 @@ const Hero = () => {
               className="group px-7 py-3.5 rounded-full font-medium text-black flex items-center gap-2 transition hover:scale-[1.03]"
               style={{ background: `linear-gradient(135deg, ${GOLD}, ${GOLD_SOFT})`, boxShadow: `0 10px 40px -10px ${GOLD}80` }}
             >
-              Barber topish
+              {t("land.findBarber")}
               <ArrowRight className="w-4 h-4 transition group-hover:translate-x-1" />
             </button>
             <Link
               to="/auth/login?mode=register&role=barber"
               className="px-7 py-3.5 rounded-full font-medium text-white border border-white/20 backdrop-blur-md hover:bg-white/10 transition"
             >
-              Barber sifatida qo'shilish
+              {t("land.joinBarber")}
             </Link>
           </div>
 
@@ -223,7 +224,7 @@ const Hero = () => {
                 {[1, 2, 3, 4, 5].map((i) => <Star key={i} className="w-3.5 h-3.5 fill-current" style={{ color: GOLD }} />)}
                 <span className="ml-1 font-semibold">4.9</span>
               </div>
-              <div className="text-xs">10,000+ baxtli mijoz</div>
+              <div className="text-xs">{t("land.happy")}</div>
             </div>
           </div>
         </motion.div>
