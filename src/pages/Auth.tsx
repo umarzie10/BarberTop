@@ -57,7 +57,7 @@ const Auth = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4 relative">
       <Link to="/auth" className="absolute top-4 left-4 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition">
-        <ArrowLeft className="w-3.5 h-3.5" /> Bosh sahifa
+        <ArrowLeft className="w-3.5 h-3.5" /> {t("auth.backHome")}
       </Link>
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
         <div className="flex items-center justify-center gap-1 mb-6">
