@@ -52,25 +52,6 @@ const Auth = () => {
     }
   };
 
-  const seedDemo = async () => {
-    setSeeding(true);
-    try {
-      const { error } = await supabase.functions.invoke("seed-users");
-      if (error) throw error;
-      toast.success("Demo akkauntlar tayyor!");
-    } catch (e: any) {
-      toast.error(e?.message || "Xato yuz berdi");
-    } finally {
-      setSeeding(false);
-    }
-  };
-
-  const fillDemo = (d: typeof DEMO[0]) => {
-    setIsLogin(true);
-    setEmail(d.email);
-    setPassword(d.password);
-  };
-
   const langs: Language[] = ["uz", "ru", "en"];
 
   return (
