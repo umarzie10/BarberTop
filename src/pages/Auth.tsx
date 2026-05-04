@@ -6,12 +6,6 @@ import { useLanguage, langLabels, type Language } from "@/contexts/LanguageConte
 import { Globe, Sparkles, Loader2, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
-const DEMO = [
-  { email: "admin@barber.uz", password: "umar.1020", role: "Admin" },
-  { email: "barber@barber.uz", password: "umar.1020", role: "Barber" },
-  { email: "user@barber.uz", password: "umar.1020", role: "Client" },
-];
-
 const Auth = () => {
   const [params] = useSearchParams();
   const [isLogin, setIsLogin] = useState(params.get("mode") !== "register");
@@ -21,7 +15,6 @@ const Auth = () => {
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [seeding, setSeeding] = useState(false);
   const navigate = useNavigate();
   const { t, lang, setLang } = useLanguage();
 
