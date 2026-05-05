@@ -325,14 +325,18 @@ export type Database = {
           busy_status: boolean
           cover_url: string | null
           created_at: string
+          district: string | null
           experience_years: number | null
+          fast_response: boolean | null
           full_name: string
+          gender: string | null
           home_service: boolean
           id: string
           instagram: string | null
           map_link: string | null
           photo_url: string | null
           rating: number | null
+          region: string | null
           salon_address: string | null
           salon_name: string | null
           specialty: string | null
@@ -351,14 +355,18 @@ export type Database = {
           busy_status?: boolean
           cover_url?: string | null
           created_at?: string
+          district?: string | null
           experience_years?: number | null
+          fast_response?: boolean | null
           full_name: string
+          gender?: string | null
           home_service?: boolean
           id?: string
           instagram?: string | null
           map_link?: string | null
           photo_url?: string | null
           rating?: number | null
+          region?: string | null
           salon_address?: string | null
           salon_name?: string | null
           specialty?: string | null
@@ -377,14 +385,18 @@ export type Database = {
           busy_status?: boolean
           cover_url?: string | null
           created_at?: string
+          district?: string | null
           experience_years?: number | null
+          fast_response?: boolean | null
           full_name?: string
+          gender?: string | null
           home_service?: boolean
           id?: string
           instagram?: string | null
           map_link?: string | null
           photo_url?: string | null
           rating?: number | null
+          region?: string | null
           salon_address?: string | null
           salon_name?: string | null
           specialty?: string | null
