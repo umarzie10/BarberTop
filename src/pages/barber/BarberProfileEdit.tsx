@@ -100,11 +100,28 @@ export default function BarberProfileEdit() {
         <Card>
           <h3 className="text-sm font-semibold mb-4 flex items-center gap-2"><MapPin className="w-4 h-4" /> Lokatsiya</h3>
           <div className="grid sm:grid-cols-2 gap-3">
+            <Field label="Viloyat">
+              <select className={inputCls} value={form.region || ""} onChange={(e) => setForm({ ...form, region: e.target.value })}>
+                <option value="">—</option>
+                {["Toshkent","Samarqand","Buxoro","Andijon","Farg'ona","Namangan","Qashqadaryo","Surxondaryo","Xorazm","Navoiy","Jizzax","Sirdaryo","Qoraqalpog'iston"].map((r) => <option key={r} value={r}>{r}</option>)}
+              </select>
+            </Field>
+            <Field label="Tuman">
+              <input className={inputCls} value={form.district || ""} onChange={(e) => setForm({ ...form, district: e.target.value })} placeholder="Yunusobod, Chilonzor..." />
+            </Field>
             <Field label="Salon nomi"><input className={inputCls} value={form.salon_name || ""} onChange={(e) => setForm({ ...form, salon_name: e.target.value })} /></Field>
             <Field label="Manzil"><input className={inputCls} value={form.salon_address || ""} onChange={(e) => setForm({ ...form, salon_address: e.target.value })} /></Field>
             <div className="sm:col-span-2"><Field label="Google Maps havola"><input className={inputCls} value={form.map_link || ""} onChange={(e) => setForm({ ...form, map_link: e.target.value })} placeholder="https://maps.google.com/..." /></Field></div>
+            <Field label="Jins (mijoz uchun)">
+              <select className={inputCls} value={form.gender || "any"} onChange={(e) => setForm({ ...form, gender: e.target.value })}>
+                <option value="any">Universal</option>
+                <option value="male">Erkak</option>
+                <option value="female">Ayol</option>
+              </select>
+            </Field>
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.home_service} onChange={(e) => setForm({ ...form, home_service: e.target.checked })} /> Uyga borib xizmat ko'rsataman</label>
-            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.busy_status} onChange={(e) => setForm({ ...form, busy_status: e.target.checked })} /> Hozir bandman (bron qabul qilmayman)</label>
+            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.busy_status} onChange={(e) => setForm({ ...form, busy_status: e.target.checked })} /> Hozir bandman</label>
+            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.fast_response || false} onChange={(e) => setForm({ ...form, fast_response: e.target.checked })} /> ⚡ Tez javob beraman</label>
           </div>
         </Card>
 
