@@ -2,9 +2,10 @@ import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { PageHeader, Card, Empty } from "@/components/shared/Page";
+import { useTier } from "@/hooks/usePlanFeatures";
 import { toast } from "sonner";
-import { Ban, MessageCircle, Trash2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Ban, MessageCircle, Trash2, Lock } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function BarberClientsPage() {
   const { user } = useAuth();

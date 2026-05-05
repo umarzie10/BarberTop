@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { PageHeader, Card, Empty, Stat } from "@/components/shared/Page";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip, BarChart, Bar, CartesianGrid } from "recharts";
+import { FeatureGate } from "@/components/shared/FeatureGate";
 
 export default function BarberStatsPage() {
   const { user } = useAuth();
@@ -72,39 +73,41 @@ export default function BarberStatsPage() {
         <Stat label="Reyting" value={rating.toFixed(1)} hint={`${reviewCount} sharh`} />
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-4">
-        <Card>
-          <h3 className="text-sm font-semibold mb-4">Kunlik daromad (30 kun)</h3>
-          <div className="h-64">
-            <ResponsiveContainer>
-              <LineChart data={stats.dailyArr}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="date" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
-                <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
-                <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", fontSize: 12 }} />
-                <Line type="monotone" dataKey="amount" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </Card>
-
-        <Card>
-          <h3 className="text-sm font-semibold mb-4">Eng ko'p buyurtma — xizmatlar</h3>
-          {!stats.topServices.length ? <Empty text="Ma'lumot yo'q" /> : (
+      <FeatureGate feature="advanced_stats" audience="barber">
+        <div className="grid lg:grid-cols-2 gap-4">
+          <Card>
+            <h3 className="text-sm font-semibold mb-4">Kunlik daromad (30 kun)</h3>
             <div className="h-64">
               <ResponsiveContainer>
-                <BarChart data={stats.topServices}>
+                <LineChart data={stats.dailyArr}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="name" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
+                  <XAxis dataKey="date" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
                   <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
                   <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", fontSize: 12 }} />
-                  <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                </BarChart>
+                  <Line type="monotone" dataKey="amount" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                </LineChart>
               </ResponsiveContainer>
             </div>
-          )}
-        </Card>
-      </div>
+          </Card>
+
+          <Card>
+            <h3 className="text-sm font-semibold mb-4">Eng ko'p buyurtma — xizmatlar</h3>
+            {!stats.topServices.length ? <Empty text="Ma'lumot yo'q" /> : (
+              <div className="h-64">
+                <ResponsiveContainer>
+                  <BarChart data={stats.topServices}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis dataKey="name" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
+                    <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
+                    <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", fontSize: 12 }} />
+                    <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+          </Card>
+        </div>
+      </FeatureGate>
     </div>
   );
 }
