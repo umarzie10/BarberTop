@@ -256,6 +256,39 @@ const t: Translations = {
   // Admin barber form
   "barbers.addTitle": { uz: "Yangi barber qo'shish", ru: "Добавить нового барбера", en: "Add new barber" },
   "barbers.addNote": { uz: "Email va parol kiriting — barber shu ma'lumotlar bilan tizimga kira oladi", ru: "Введите email и пароль — барбер сможет войти с этими данными", en: "Enter email & password — barber can sign in with them" },
+
+  // Filters
+  "filter.title": { uz: "Filtrlar", ru: "Фильтры", en: "Filters" },
+  "filter.search": { uz: "Barber ismi yoki xizmat...", ru: "Имя барбера или услуга...", en: "Barber name or service..." },
+  "filter.region": { uz: "Viloyat", ru: "Регион", en: "Region" },
+  "filter.district": { uz: "Tuman", ru: "Район", en: "District" },
+  "filter.all": { uz: "Hammasi", ru: "Все", en: "All" },
+  "filter.priceRange": { uz: "Narx oralig'i", ru: "Диапазон цен", en: "Price range" },
+  "filter.rating": { uz: "Reyting", ru: "Рейтинг", en: "Rating" },
+  "filter.experience": { uz: "Tajriba", ru: "Опыт", en: "Experience" },
+  "filter.gender": { uz: "Jins", ru: "Пол", en: "Gender" },
+  "filter.male": { uz: "Erkak", ru: "Мужчина", en: "Male" },
+  "filter.female": { uz: "Ayol", ru: "Женщина", en: "Female" },
+  "filter.sort": { uz: "Saralash", ru: "Сортировка", en: "Sort" },
+  "filter.sort.rating": { uz: "Eng yaxshi reyting", ru: "Лучший рейтинг", en: "Top rated" },
+  "filter.sort.priceLow": { uz: "Eng arzon", ru: "Сначала дешёвые", en: "Cheapest" },
+  "filter.sort.priceHigh": { uz: "Eng qimmat", ru: "Сначала дорогие", en: "Most expensive" },
+  "filter.sort.exp": { uz: "Tajribali", ru: "Опытные", en: "Most experienced" },
+  "filter.chip.near": { uz: "📍 Yaqin", ru: "📍 Рядом", en: "📍 Nearby" },
+  "filter.chip.top": { uz: "⭐ TOP", ru: "⭐ TOP", en: "⭐ TOP" },
+  "filter.chip.cheap": { uz: "💰 Arzon", ru: "💰 Недорого", en: "💰 Cheap" },
+  "filter.chip.open": { uz: "🕒 Ochiq", ru: "🕒 Открыто", en: "🕒 Open now" },
+  "filter.chip.pro": { uz: "💎 PRO", ru: "💎 PRO", en: "💎 PRO" },
+  "filter.chip.vip": { uz: "👑 VIP", ru: "👑 VIP", en: "👑 VIP" },
+  "filter.chip.home": { uz: "🏠 Uyga boradi", ru: "🏠 На дом", en: "🏠 Home service" },
+  "filter.chip.fast": { uz: "⚡ Tez javob", ru: "⚡ Быстрый ответ", en: "⚡ Fast response" },
+  "filter.reset": { uz: "Tozalash", ru: "Сбросить", en: "Reset" },
+  "filter.results": { uz: "ta natija", ru: "результатов", en: "results" },
+
+  // Plan gating
+  "gate.locked": { uz: "Bu funksiya yopiq", ru: "Эта функция недоступна", en: "Feature locked" },
+  "gate.upgradeTo": { uz: "ga o'tkazing", ru: "обновитесь до", en: "Upgrade to" },
+  "gate.viewPlans": { uz: "Rejalarni ko'rish", ru: "Посмотреть тарифы", en: "View plans" },
 };
 
 export const langLabels: Record<Language, string> = { uz: "UZ", ru: "RU", en: "EN" };
