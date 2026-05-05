@@ -10,6 +10,8 @@ import { useNavigate, Link } from "react-router-dom";
 export default function BarberClientsPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { can } = useTier("barber");
+  const FREE_LIMIT = 5;
   const [barberId, setBarberId] = useState<string | null>(null);
   const [appts, setAppts] = useState<any[]>([]);
   const [profiles, setProfiles] = useState<Record<string, any>>({});
@@ -86,7 +88,7 @@ export default function BarberClientsPage() {
       {tab === "all" ? (
         !clients.length ? <Empty text="Mijoz yo'q" /> : (
           <div className="space-y-2">
-            {clients.map((c) => {
+            {(can("unlimited_clients") ? clients : clients.slice(0, FREE_LIMIT)).map((c) => {
               const isBl = blacklist.some((b) => b.client_id === c.client_id);
               return (
                 <Card key={c.client_id}>
@@ -104,6 +106,14 @@ export default function BarberClientsPage() {
                 </Card>
               );
             })}
+            {!can("unlimited_clients") && clients.length > FREE_LIMIT && (
+              <Card className="border-dashed border-2 text-center">
+                <Lock className="w-5 h-5 mx-auto text-primary mb-2" />
+                <p className="text-sm font-semibold mb-1">+{clients.length - FREE_LIMIT} ta mijoz yashirin</p>
+                <p className="text-xs text-muted-foreground mb-3">Free rejada faqat {FREE_LIMIT} ta mijoz ko'rinadi. Barchasini ko'rish uchun PRO ga o'ting.</p>
+                <Link to="/plans" className="inline-block px-4 py-2 text-xs bg-primary text-primary-foreground rounded-md">PRO olish</Link>
+              </Card>
+            )}
           </div>
         )
       ) : (
