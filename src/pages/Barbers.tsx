@@ -13,7 +13,7 @@ import { distanceKm, getBrowserLocation } from "@/lib/geo";
 const REGIONS = ["Toshkent", "Samarqand", "Buxoro", "Andijon", "Farg'ona", "Namangan", "Qashqadaryo", "Surxondaryo", "Xorazm", "Navoiy", "Jizzax", "Sirdaryo", "Qoraqalpog'iston"];
 const TASHKENT_DISTRICTS = ["Yunusobod", "Chilonzor", "Mirzo Ulug'bek", "Yashnobod", "Sergeli", "Yakkasaroy", "Mirobod", "Shayxontohur", "Olmazor", "Bektemir", "Uchtepa"];
 
-type SortKey = "rating" | "priceLow" | "priceHigh" | "exp";
+type SortKey = "rating" | "priceLow" | "priceHigh" | "exp" | "near";
 
 export default function Barbers() {
   const navigate = useNavigate();
@@ -123,20 +123,34 @@ export default function Barbers() {
     if (chips.has("top")) list = list.filter((b) => Number(b.rating) >= 4.5);
     if (chips.has("open")) list = list.filter((b) => !b.busy_status);
 
+    // distance enrich + filter
+    if (myLoc) {
+      list = list.map((b) => {
+        if (b.latitude != null && b.longitude != null) {
+          return { ...b, _dist: distanceKm(myLoc.lat, myLoc.lng, b.latitude, b.longitude) };
+        }
+        return { ...b, _dist: null };
+      });
+      if (radiusKm > 0) list = list.filter((b) => b._dist != null && b._dist <= radiusKm);
+    }
+
     // sort
     const sorted = [...list].sort((a, b) => {
+      if (myLoc && (sort === "rating" || sort === "near")) {
+        if (sort === "near") return (a._dist ?? 9e9) - (b._dist ?? 9e9);
+      }
       const tierRank = (uid: string) => plans[uid] === "vip" ? 2 : plans[uid] === "pro" ? 1 : 0;
       const tierDiff = tierRank(b.user_id) - tierRank(a.user_id);
       if (tierDiff !== 0 && sort === "rating") return tierDiff || Number(b.rating) - Number(a.rating);
       switch (sort) {
         case "rating": return Number(b.rating) - Number(a.rating);
         case "exp": return (b.experience_years || 0) - (a.experience_years || 0);
-        case "priceLow": case "priceHigh": return Number(b.rating) - Number(a.rating); // price not on barber
+        case "priceLow": case "priceHigh": return Number(b.rating) - Number(a.rating);
       }
       return 0;
     });
     return sorted;
-  }, [items, plans, q, region, district, minRating, minExp, gender, chips, sort, role, myTier]);
+  }, [items, plans, q, region, district, minRating, minExp, gender, chips, sort, role, myTier, myLoc, radiusKm]);
 
   const districts = region === "Toshkent" ? TASHKENT_DISTRICTS : [];
 
