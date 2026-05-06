@@ -320,6 +320,7 @@ export default function Barbers() {
                   <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
                   <span className="text-foreground font-medium">{Number(b.rating).toFixed(1)}</span>
                   {b.experience_years > 0 && <span className="text-muted-foreground">· {b.experience_years} {t("common.year")}</span>}
+                  {b._dist != null && <span className="text-primary font-medium">· 📍 {b._dist.toFixed(1)} km</span>}
                   {b.district && <span className="text-muted-foreground">· {b.district}</span>}
                   {b.busy_status && <span className="text-[10px] px-1.5 py-0.5 bg-destructive/10 text-destructive rounded">Bandman</span>}
                   {b.home_service && <span className="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded">🏠</span>}
