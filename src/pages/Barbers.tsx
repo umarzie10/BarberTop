@@ -38,6 +38,19 @@ export default function Barbers() {
   const [chips, setChips] = useState<Set<string>>(new Set());
   const [sort, setSort] = useState<SortKey>("rating");
   const [showFilters, setShowFilters] = useState(false);
+  const [myLoc, setMyLoc] = useState<{ lat: number; lng: number } | null>(null);
+  const [radiusKm, setRadiusKm] = useState<number>(0); // 0 = any
+
+  const requestLocation = async () => {
+    try {
+      const loc = await getBrowserLocation();
+      setMyLoc(loc);
+      if (!radiusKm) setRadiusKm(5);
+      toast.success("Joylashuv aniqlandi");
+    } catch {
+      toast.error("Joylashuvga ruxsat berilmadi");
+    }
+  };
 
   const load = async () => {
     const { data } = await supabase.from("barbers").select("*").eq("active", true);
