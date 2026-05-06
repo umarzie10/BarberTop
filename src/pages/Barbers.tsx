@@ -283,6 +283,7 @@ export default function Barbers() {
               <select value={sort} onChange={(e) => setSort(e.target.value as SortKey)} className="w-full px-2 py-1.5 text-sm border border-border rounded-md bg-background">
                 <option value="rating">{t("filter.sort.rating")}</option>
                 <option value="exp">{t("filter.sort.exp")}</option>
+                {myLoc && <option value="near">📍 Eng yaqin</option>}
               </select>
             </div>
           </div>
