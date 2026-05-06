@@ -6,8 +6,9 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTier } from "@/hooks/usePlanFeatures";
 import { PageHeader, Card, Empty } from "@/components/shared/Page";
-import { Plus, Trash2, Star, Crown, Search, SlidersHorizontal, X } from "lucide-react";
+import { Plus, Trash2, Star, Crown, Search, SlidersHorizontal, X, MapPin } from "lucide-react";
 import { toast } from "sonner";
+import { distanceKm, getBrowserLocation } from "@/lib/geo";
 
 const REGIONS = ["Toshkent", "Samarqand", "Buxoro", "Andijon", "Farg'ona", "Namangan", "Qashqadaryo", "Surxondaryo", "Xorazm", "Navoiy", "Jizzax", "Sirdaryo", "Qoraqalpog'iston"];
 const TASHKENT_DISTRICTS = ["Yunusobod", "Chilonzor", "Mirzo Ulug'bek", "Yashnobod", "Sergeli", "Yakkasaroy", "Mirobod", "Shayxontohur", "Olmazor", "Bektemir", "Uchtepa"];
