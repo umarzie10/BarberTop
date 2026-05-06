@@ -53,11 +53,21 @@ export default function Book() {
     return globalServices;
   }, [barberId, barberServices, globalServices]);
 
+  // Load taken slots + realtime subscription
   useEffect(() => {
     if (!barberId || !date) return;
-    supabase.from("appointments").select("appointment_time").eq("barber_id", barberId).eq("appointment_date", date).neq("status", "cancelled").then(({ data }) => {
+    const fetchTaken = async () => {
+      const { data } = await supabase.from("appointments").select("appointment_time")
+        .eq("barber_id", barberId).eq("appointment_date", date).neq("status", "cancelled");
       setTaken((data || []).map((a) => a.appointment_time?.slice(0, 5)));
-    });
+    };
+    fetchTaken();
+
+    const channel = supabase.channel(`book-${barberId}-${date}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "appointments", filter: `barber_id=eq.${barberId}` },
+        () => fetchTaken())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
   }, [barberId, date]);
 
   const submit = async (e: React.FormEvent) => {
