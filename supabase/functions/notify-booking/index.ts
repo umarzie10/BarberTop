@@ -1,7 +1,10 @@
 // Sends Telegram notifications for booking events. Called from the client
 // (or from Postgres triggers in the future) with appointment_id + event type.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
-import { corsHeaders } from "https://esm.sh/@supabase/supabase-js@2.45.4/cors";
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
 
 const TG_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN")!;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
