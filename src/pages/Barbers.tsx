@@ -198,6 +198,20 @@ export default function Barbers() {
 
       {/* Filter chips */}
       <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+        <button onClick={requestLocation}
+          className={`px-3 py-1.5 text-xs rounded-full border whitespace-nowrap forge-transition flex items-center gap-1 ${myLoc ? "bg-primary text-primary-foreground border-primary" : "border-border bg-background hover:border-primary"}`}>
+          <MapPin className="w-3 h-3" /> {myLoc ? `📍 ${radiusKm || "∞"}km` : "📍 Menga yaqin"}
+        </button>
+        {myLoc && (
+          <select value={radiusKm} onChange={(e) => setRadiusKm(Number(e.target.value))}
+            className="px-2 py-1.5 text-xs rounded-full border border-border bg-background">
+            <option value={0}>Hammasi</option>
+            <option value={1}>1 km</option>
+            <option value={3}>3 km</option>
+            <option value={5}>5 km</option>
+            <option value={10}>10 km</option>
+          </select>
+        )}
         {[
           ["top", t("filter.chip.top")],
           ["open", t("filter.chip.open")],
@@ -211,8 +225,8 @@ export default function Barbers() {
             {label}
           </button>
         ))}
-        {(chips.size > 0 || q || region || minRating || minExp || gender) && (
-          <button onClick={reset} className="px-3 py-1.5 text-xs rounded-full border border-destructive/40 text-destructive hover:bg-destructive/10 flex items-center gap-1 whitespace-nowrap">
+        {(chips.size > 0 || q || region || minRating || minExp || gender || myLoc) && (
+          <button onClick={() => { reset(); setMyLoc(null); setRadiusKm(0); }} className="px-3 py-1.5 text-xs rounded-full border border-destructive/40 text-destructive hover:bg-destructive/10 flex items-center gap-1 whitespace-nowrap">
             <X className="w-3 h-3" /> {t("filter.reset")}
           </button>
         )}
