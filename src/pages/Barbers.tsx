@@ -6,13 +6,14 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTier } from "@/hooks/usePlanFeatures";
 import { PageHeader, Card, Empty } from "@/components/shared/Page";
-import { Plus, Trash2, Star, Crown, Search, SlidersHorizontal, X } from "lucide-react";
+import { Plus, Trash2, Star, Crown, Search, SlidersHorizontal, X, MapPin } from "lucide-react";
 import { toast } from "sonner";
+import { distanceKm, getBrowserLocation } from "@/lib/geo";
 
 const REGIONS = ["Toshkent", "Samarqand", "Buxoro", "Andijon", "Farg'ona", "Namangan", "Qashqadaryo", "Surxondaryo", "Xorazm", "Navoiy", "Jizzax", "Sirdaryo", "Qoraqalpog'iston"];
 const TASHKENT_DISTRICTS = ["Yunusobod", "Chilonzor", "Mirzo Ulug'bek", "Yashnobod", "Sergeli", "Yakkasaroy", "Mirobod", "Shayxontohur", "Olmazor", "Bektemir", "Uchtepa"];
 
-type SortKey = "rating" | "priceLow" | "priceHigh" | "exp";
+type SortKey = "rating" | "priceLow" | "priceHigh" | "exp" | "near";
 
 export default function Barbers() {
   const navigate = useNavigate();
@@ -37,6 +38,19 @@ export default function Barbers() {
   const [chips, setChips] = useState<Set<string>>(new Set());
   const [sort, setSort] = useState<SortKey>("rating");
   const [showFilters, setShowFilters] = useState(false);
+  const [myLoc, setMyLoc] = useState<{ lat: number; lng: number } | null>(null);
+  const [radiusKm, setRadiusKm] = useState<number>(0); // 0 = any
+
+  const requestLocation = async () => {
+    try {
+      const loc = await getBrowserLocation();
+      setMyLoc(loc);
+      if (!radiusKm) setRadiusKm(5);
+      toast.success("Joylashuv aniqlandi");
+    } catch {
+      toast.error("Joylashuvga ruxsat berilmadi");
+    }
+  };
 
   const load = async () => {
     const { data } = await supabase.from("barbers").select("*").eq("active", true);
@@ -109,20 +123,34 @@ export default function Barbers() {
     if (chips.has("top")) list = list.filter((b) => Number(b.rating) >= 4.5);
     if (chips.has("open")) list = list.filter((b) => !b.busy_status);
 
+    // distance enrich + filter
+    if (myLoc) {
+      list = list.map((b) => {
+        if (b.latitude != null && b.longitude != null) {
+          return { ...b, _dist: distanceKm(myLoc.lat, myLoc.lng, b.latitude, b.longitude) };
+        }
+        return { ...b, _dist: null };
+      });
+      if (radiusKm > 0) list = list.filter((b) => b._dist != null && b._dist <= radiusKm);
+    }
+
     // sort
     const sorted = [...list].sort((a, b) => {
+      if (myLoc && (sort === "rating" || sort === "near")) {
+        if (sort === "near") return (a._dist ?? 9e9) - (b._dist ?? 9e9);
+      }
       const tierRank = (uid: string) => plans[uid] === "vip" ? 2 : plans[uid] === "pro" ? 1 : 0;
       const tierDiff = tierRank(b.user_id) - tierRank(a.user_id);
       if (tierDiff !== 0 && sort === "rating") return tierDiff || Number(b.rating) - Number(a.rating);
       switch (sort) {
         case "rating": return Number(b.rating) - Number(a.rating);
         case "exp": return (b.experience_years || 0) - (a.experience_years || 0);
-        case "priceLow": case "priceHigh": return Number(b.rating) - Number(a.rating); // price not on barber
+        case "priceLow": case "priceHigh": return Number(b.rating) - Number(a.rating);
       }
       return 0;
     });
     return sorted;
-  }, [items, plans, q, region, district, minRating, minExp, gender, chips, sort, role, myTier]);
+  }, [items, plans, q, region, district, minRating, minExp, gender, chips, sort, role, myTier, myLoc, radiusKm]);
 
   const districts = region === "Toshkent" ? TASHKENT_DISTRICTS : [];
 
@@ -170,6 +198,20 @@ export default function Barbers() {
 
       {/* Filter chips */}
       <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+        <button onClick={requestLocation}
+          className={`px-3 py-1.5 text-xs rounded-full border whitespace-nowrap forge-transition flex items-center gap-1 ${myLoc ? "bg-primary text-primary-foreground border-primary" : "border-border bg-background hover:border-primary"}`}>
+          <MapPin className="w-3 h-3" /> {myLoc ? `📍 ${radiusKm || "∞"}km` : "📍 Menga yaqin"}
+        </button>
+        {myLoc && (
+          <select value={radiusKm} onChange={(e) => setRadiusKm(Number(e.target.value))}
+            className="px-2 py-1.5 text-xs rounded-full border border-border bg-background">
+            <option value={0}>Hammasi</option>
+            <option value={1}>1 km</option>
+            <option value={3}>3 km</option>
+            <option value={5}>5 km</option>
+            <option value={10}>10 km</option>
+          </select>
+        )}
         {[
           ["top", t("filter.chip.top")],
           ["open", t("filter.chip.open")],
@@ -183,8 +225,8 @@ export default function Barbers() {
             {label}
           </button>
         ))}
-        {(chips.size > 0 || q || region || minRating || minExp || gender) && (
-          <button onClick={reset} className="px-3 py-1.5 text-xs rounded-full border border-destructive/40 text-destructive hover:bg-destructive/10 flex items-center gap-1 whitespace-nowrap">
+        {(chips.size > 0 || q || region || minRating || minExp || gender || myLoc) && (
+          <button onClick={() => { reset(); setMyLoc(null); setRadiusKm(0); }} className="px-3 py-1.5 text-xs rounded-full border border-destructive/40 text-destructive hover:bg-destructive/10 flex items-center gap-1 whitespace-nowrap">
             <X className="w-3 h-3" /> {t("filter.reset")}
           </button>
         )}
@@ -241,6 +283,7 @@ export default function Barbers() {
               <select value={sort} onChange={(e) => setSort(e.target.value as SortKey)} className="w-full px-2 py-1.5 text-sm border border-border rounded-md bg-background">
                 <option value="rating">{t("filter.sort.rating")}</option>
                 <option value="exp">{t("filter.sort.exp")}</option>
+                {myLoc && <option value="near">📍 Eng yaqin</option>}
               </select>
             </div>
           </div>
@@ -278,6 +321,7 @@ export default function Barbers() {
                   <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
                   <span className="text-foreground font-medium">{Number(b.rating).toFixed(1)}</span>
                   {b.experience_years > 0 && <span className="text-muted-foreground">· {b.experience_years} {t("common.year")}</span>}
+                  {b._dist != null && <span className="text-primary font-medium">· 📍 {b._dist.toFixed(1)} km</span>}
                   {b.district && <span className="text-muted-foreground">· {b.district}</span>}
                   {b.busy_status && <span className="text-[10px] px-1.5 py-0.5 bg-destructive/10 text-destructive rounded">Bandman</span>}
                   {b.home_service && <span className="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded">🏠</span>}

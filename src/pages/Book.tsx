@@ -53,11 +53,21 @@ export default function Book() {
     return globalServices;
   }, [barberId, barberServices, globalServices]);
 
+  // Load taken slots + realtime subscription
   useEffect(() => {
     if (!barberId || !date) return;
-    supabase.from("appointments").select("appointment_time").eq("barber_id", barberId).eq("appointment_date", date).neq("status", "cancelled").then(({ data }) => {
+    const fetchTaken = async () => {
+      const { data } = await supabase.from("appointments").select("appointment_time")
+        .eq("barber_id", barberId).eq("appointment_date", date).neq("status", "cancelled");
       setTaken((data || []).map((a) => a.appointment_time?.slice(0, 5)));
-    });
+    };
+    fetchTaken();
+
+    const channel = supabase.channel(`book-${barberId}-${date}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "appointments", filter: `barber_id=eq.${barberId}` },
+        () => fetchTaken())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
   }, [barberId, date]);
 
   const submit = async (e: React.FormEvent) => {
@@ -67,7 +77,7 @@ export default function Book() {
     const svc = services.find((s) => s.id === serviceId);
     // For barber_services we don't have an FK to global services — store null service_id when custom
     const isBarberSvc = !!barberServices.find((s) => s.id === serviceId);
-    const { error } = await supabase.from("appointments").insert({
+    const { data: inserted, error } = await supabase.from("appointments").insert({
       client_id: user.id,
       service_id: isBarberSvc ? null : serviceId,
       barber_id: barberId,
@@ -78,9 +88,13 @@ export default function Book() {
       notes: isBarberSvc ? `${svc?.name}${notes ? ` — ${notes}` : ""}` : notes,
       total_price: svc?.price || 0,
       status: "pending",
-    });
+    }).select("id").maybeSingle();
     setLoading(false);
     if (error) return toast.error(error.message);
+    // Fire-and-forget Telegram notification (no await/no toast on failure — bot is optional)
+    if (inserted?.id) {
+      supabase.functions.invoke("notify-booking", { body: { appointment_id: inserted.id, event: "created" } }).catch(() => {});
+    }
     toast.success(t("client.bookingSuccess"));
     navigate("/my-bookings");
   };

@@ -333,6 +333,8 @@ export type Database = {
           home_service: boolean
           id: string
           instagram: string | null
+          latitude: number | null
+          longitude: number | null
           map_link: string | null
           photo_url: string | null
           rating: number | null
@@ -363,6 +365,8 @@ export type Database = {
           home_service?: boolean
           id?: string
           instagram?: string | null
+          latitude?: number | null
+          longitude?: number | null
           map_link?: string | null
           photo_url?: string | null
           rating?: number | null
@@ -393,6 +397,8 @@ export type Database = {
           home_service?: boolean
           id?: string
           instagram?: string | null
+          latitude?: number | null
+          longitude?: number | null
           map_link?: string | null
           photo_url?: string | null
           rating?: number | null
@@ -545,6 +551,8 @@ export type Database = {
           full_name: string | null
           id: string
           phone: string | null
+          telegram_chat_id: number | null
+          telegram_link_token: string | null
           updated_at: string
           user_id: string
         }
@@ -554,6 +562,8 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone?: string | null
+          telegram_chat_id?: number | null
+          telegram_link_token?: string | null
           updated_at?: string
           user_id: string
         }
@@ -563,6 +573,8 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone?: string | null
+          telegram_chat_id?: number | null
+          telegram_link_token?: string | null
           updated_at?: string
           user_id?: string
         }

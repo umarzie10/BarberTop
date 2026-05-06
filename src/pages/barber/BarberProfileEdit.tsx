@@ -119,6 +119,8 @@ export default function BarberProfileEdit() {
                 <option value="female">Ayol</option>
               </select>
             </Field>
+            <Field label="Latitude (Google Maps'dan)"><input type="number" step="0.000001" className={inputCls} value={form.latitude || ""} onChange={(e) => setForm({ ...form, latitude: e.target.value ? Number(e.target.value) : null })} placeholder="41.311081" /></Field>
+            <Field label="Longitude"><input type="number" step="0.000001" className={inputCls} value={form.longitude || ""} onChange={(e) => setForm({ ...form, longitude: e.target.value ? Number(e.target.value) : null })} placeholder="69.240562" /></Field>
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.home_service} onChange={(e) => setForm({ ...form, home_service: e.target.checked })} /> Uyga borib xizmat ko'rsataman</label>
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.busy_status} onChange={(e) => setForm({ ...form, busy_status: e.target.checked })} /> Hozir bandman</label>
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.fast_response || false} onChange={(e) => setForm({ ...form, fast_response: e.target.checked })} /> ⚡ Tez javob beraman</label>
